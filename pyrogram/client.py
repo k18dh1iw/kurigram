@@ -225,7 +225,7 @@ class Client(Methods):
         fetch_stories (``bool``, *optional*):
             Pass True to automatically fetch stories if they are missing.
             Defaults to True.
-            
+
         fetch_stickers (``bool``, *optional*):
             Pass True to automatically fetch names of sticker sets.
             Defaults to True.
@@ -818,8 +818,11 @@ class Client(Methods):
                             qts=0
                         )
                     )
-                except (ChannelPrivate, ChannelInvalid, PersistentTimestampOutdated, PersistentTimestampInvalid):
+                except (ChannelPrivate, ChannelInvalid):
+                    await self.storage.update_state(id)
                     break
+                except (PersistentTimestampOutdated, PersistentTimestampInvalid):
+                    continue
 
                 if isinstance(diff, raw.types.updates.DifferenceEmpty):
                     await self.storage.update_state(
@@ -833,10 +836,11 @@ class Client(Methods):
                     )
                     break
                 elif isinstance(diff, raw.types.updates.DifferenceTooLong):
+                    local_pts = diff.pts
                     await self.storage.update_state(
                         (
                             id,
-                            diff.pts,
+                            local_pts,
                             None,
                             local_date,
                             local_seq
@@ -868,10 +872,11 @@ class Client(Methods):
                     )
                     break
                 elif isinstance(diff, raw.types.updates.ChannelDifferenceTooLong):
+                    local_pts = diff.dialog.pts
                     await self.storage.update_state(
                         (
                             id,
-                            diff.dialog.pts,
+                            local_pts,
                             None,
                             local_date,
                             local_seq
