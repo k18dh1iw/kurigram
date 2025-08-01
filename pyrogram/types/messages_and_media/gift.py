@@ -104,6 +104,9 @@ class Gift(Object):
         last_resale_price (``int``, *optional*):
             Number of Telegram Stars that were paid by the sender for the gift; 0 if the gift was upgraded or transferred.
 
+        last_ton_resale_price (``int``, *optional*):
+            Number of TON that were paid by the sender for the gift.
+
         number (``int``, *optional*):
             Unique number of the upgraded gift among gifts upgraded from the same gift.
 
@@ -193,6 +196,7 @@ class Gift(Object):
         transfer_price: Optional[int] = None,
         resale_price: Optional[int] = None,
         last_resale_price: Optional[int] = None,
+        last_ton_resale_price: Optional[int] = None,
         upgrade_message_id: Optional[int] = None,
         name: Optional[str] = None,
         title: Optional[str] = None,
@@ -239,6 +243,7 @@ class Gift(Object):
         self.transfer_price = transfer_price
         self.resale_price = resale_price
         self.last_resale_price = last_resale_price
+        self.last_ton_resale_price = last_ton_resale_price
         self.upgrade_message_id = upgrade_message_id
         self.name = name
         self.title = title
@@ -316,6 +321,16 @@ class Gift(Object):
 
         owner_id = utils.get_raw_peer_id(star_gift.owner_id)
 
+        last_resale_price = None
+        last_ton_resale_price = None
+
+        if star_gift.resell_amount:
+            for currency in star_gift.resell_amount:
+                if isinstance(currency, raw.types.StarsAmount):
+                    last_resale_price = currency.amount
+                elif isinstance(currency, raw.types.StarsTonAmount):
+                    last_ton_resale_price = currency.amount
+
         return Gift(
             id=star_gift.id,
             name=star_gift.slug,
@@ -330,7 +345,8 @@ class Gift(Object):
             owner_name=star_gift.owner_name,
             owner_address=star_gift.owner_address,
             gift_address=star_gift.gift_address,
-            last_resale_price=star_gift.resell_stars,
+            last_resale_price=last_resale_price,
+            last_ton_resale_price=last_ton_resale_price,
             is_upgraded=True,
             raw=star_gift,
             client=client
