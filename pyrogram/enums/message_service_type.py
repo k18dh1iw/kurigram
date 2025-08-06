@@ -99,6 +99,9 @@ class MessageServiceType(AutoName):
     GIFTED_STARS = auto()
     "Gifted stars"
 
+    GIFTED_TON = auto()
+    "Gifted TON"
+
     VIDEO_CHAT_STARTED = auto()
     "Video chat started"
 

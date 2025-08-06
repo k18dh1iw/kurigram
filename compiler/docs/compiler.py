@@ -734,6 +734,7 @@ def pyrogram_api():
             ChatBackground
             ChatTheme
             GiftedStars
+            GiftedTon
             UpgradedGiftAttributeId
         """,
         bot_keyboards="""

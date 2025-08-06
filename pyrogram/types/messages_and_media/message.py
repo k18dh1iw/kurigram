@@ -407,6 +407,9 @@ class Message(Object, Update):
         gifted_stars (:obj:`~pyrogram.types.GiftedStars`, *optional*):
             Service message: gifted stars information.
 
+        gifted_ton (:obj:`~pyrogram.types.GiftedTon`, *optional*):
+            Service message: gifted ton information.
+
         gift (:obj:`~pyrogram.types.Gift`, *optional*):
             Service message: star gift information.
 
@@ -620,6 +623,7 @@ class Message(Object, Update):
         gift_code: Optional["types.GiftCode"] = None,
         gifted_premium: Optional["types.GiftedPremium"] = None,
         gifted_stars: Optional["types.GiftedStars"] = None,
+        gifted_ton: Optional["types.GiftedTon"] = None,
         gift: Optional["types.Gift"] = None,
         suggest_profile_photo: Optional["types.Photo"] = None,
         users_shared: Optional["types.UsersShared"] = None,
@@ -768,6 +772,7 @@ class Message(Object, Update):
         self.gift_code = gift_code
         self.gifted_premium = gifted_premium
         self.gifted_stars = gifted_stars
+        self.gifted_ton = gifted_ton
         self.gift = gift
         self.suggest_profile_photo = suggest_profile_photo
         self.users_shared = users_shared
@@ -848,6 +853,7 @@ class Message(Object, Update):
         gift_code = None
         gifted_premium = None
         gifted_stars = None
+        gifted_ton = None
         giveaway_created = None
         giveaway_completed = None
         video_chat_ended = None
@@ -962,6 +968,14 @@ class Message(Object, Update):
         elif isinstance(action, raw.types.MessageActionGiftStars):
             service_type = enums.MessageServiceType.GIFTED_STARS
             gifted_stars = await types.GiftedStars._parse(
+                client,
+                action,
+                gifter=users.get(from_id),
+                receiver=users.get(peer_id or from_id)
+            )
+        elif isinstance(action, raw.types.MessageActionGiftTon):
+            service_type = enums.MessageServiceType.GIFTED_TON
+            gifted_ton = await types.GiftedTon._parse(
                 client,
                 action,
                 gifter=users.get(from_id),
