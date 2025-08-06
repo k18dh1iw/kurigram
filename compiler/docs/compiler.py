@@ -294,6 +294,8 @@ def pyrogram_api():
             send_paid_media
             send_paid_reaction
             add_to_gifs
+            approve_suggested_post
+            decline_suggested_post
             add_checklist_tasks
         """,
         chats="""
@@ -712,6 +714,15 @@ def pyrogram_api():
             RefundedPayment
             ReplyParameters
             SuccessfulPayment
+            SuggestedPostInfo
+            SuggestedPostPaid
+            SuggestedPostPrice
+            SuggestedPostPriceStar
+            SuggestedPostPriceTon
+            SuggestedPostApprovalFailed
+            SuggestedPostApproved
+            SuggestedPostDeclined
+            SuggestedPostRefunded
             TextQuote
             PaidMediaInfo
             PaidMediaPreview
@@ -727,6 +738,7 @@ def pyrogram_api():
             ChatBoost
             ContactRegistered
             ScreenshotTaken
+            StarAmount
             WriteAccessAllowed
             GiftAttribute
             StoryView
@@ -817,6 +829,7 @@ def pyrogram_api():
             InputPrivacyRuleDisallowChats
             InputPrivacyRuleDisallowContacts
             InputPrivacyRuleDisallowUsers
+            InputSuggestedPostInfo
             InputTextMessageContent
             InputVenueMessageContent
         """,
@@ -1102,6 +1115,8 @@ def pyrogram_api():
             PaymentFormType
             StickerType
             MaskPointType
+            SuggestedPostRefundReason
+            SuggestedPostState
         """,
     )
 

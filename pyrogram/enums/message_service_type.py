@@ -135,6 +135,21 @@ class MessageServiceType(AutoName):
     REFUNDED_PAYMENT = auto()
     "Refunded payment"
 
+    SUGGESTED_POST_APPROVAL_FAILED = auto()
+    "Suggested post approval failed"
+
+    SUGGESTED_POST_APPROVED = auto()
+    "Suggested post approved"
+
+    SUGGESTED_POST_DECLINED = auto()
+    "Suggested post declined"
+
+    SUGGESTED_POST_PAID = auto()
+    "Suggested post paid"
+
+    SUGGESTED_POST_REFUNDED = auto()
+    "Suggested post refunded"
+
     CHAT_TTL_CHANGED = auto()
     "Chat TTL changed"
 

@@ -428,6 +428,21 @@ class Message(Object, Update):
         refunded_payment (:obj:`~pyrogram.types.RefundedPayment`, *optional*):
             Service message: refunded payment.
 
+        suggested_post_approval_failed (:obj:`~pyrogram.types.SuggestedPostApprovalFailed`, *optional*):
+            Service message: suggested post approval failed.
+
+        suggested_post_approved (:obj:`~pyrogram.types.SuggestedPostApproved`, *optional*):
+            Service message: suggested post approved.
+
+        suggested_post_declined (:obj:`~pyrogram.types.SuggestedPostDeclined`, *optional*):
+            Service message: suggested post declined.
+
+        suggested_post_paid (:obj:`~pyrogram.types.SuggestedPostPaid`, *optional*):
+            Service message: suggested post paid.
+
+        suggested_post_refunded (:obj:`~pyrogram.types.SuggestedPostRefunded`, *optional*):
+            Service message: suggested post refunded.
+
         giveaway_created (``bool``, *optional*):
             Service message: giveaway launched.
 
@@ -510,6 +525,9 @@ class Message(Object, Update):
 
         fact_check (:obj:`~pyrogram.types.FactCheck`, *optional*):
             Information about fact-check added to the message.
+
+        suggested_post_info (:obj:`~pyrogram.types.SuggestedPostInfo`, *optional*):
+            Information about the suggested post.
 
         channel_post (``bool``, *optional*):
             True, if the message is a channel post.
@@ -630,6 +648,11 @@ class Message(Object, Update):
         chat_shared: Optional["types.ChatShared"] = None,
         successful_payment: Optional["types.SuccessfulPayment"] = None,
         refunded_payment: Optional["types.RefundedPayment"] = None,
+        suggested_post_approval_failed: Optional["types.SuggestedPostApprovalFailed"] = None,
+        suggested_post_approved: Optional["types.SuggestedPostApproved"] = None,
+        suggested_post_declined: Optional["types.SuggestedPostDeclined"] = None,
+        suggested_post_paid: Optional["types.SuggestedPostPaid"] = None,
+        suggested_post_refunded: Optional["types.SuggestedPostRefunded"] = None,
         giveaway_created: Optional[bool] = None,
         chat_set_theme: Optional["types.ChatTheme"] = None,
         chat_set_background: Optional["types.ChatBackground"] = None,
@@ -658,6 +681,7 @@ class Message(Object, Update):
         pinned: Optional[bool] = None,
         restriction_reason: Optional[List["types.RestrictionReason"]] = None,
         fact_check: Optional["types.FactCheck"] = None,
+        suggested_post_info: Optional["types.SuggestedPostInfo"] = None,
         channel_post: Optional[bool] = None,
         raw: Optional["raw.types.Message"] = None
     ):
@@ -779,6 +803,11 @@ class Message(Object, Update):
         self.chat_shared = chat_shared
         self.successful_payment = successful_payment
         self.refunded_payment = refunded_payment
+        self.suggested_post_approval_failed = suggested_post_approval_failed
+        self.suggested_post_approved = suggested_post_approved
+        self.suggested_post_declined = suggested_post_declined
+        self.suggested_post_paid = suggested_post_paid
+        self.suggested_post_refunded = suggested_post_refunded
         self.giveaway_created = giveaway_created
         self.chat_set_theme = chat_set_theme
         self.chat_set_background = chat_set_background
@@ -796,6 +825,7 @@ class Message(Object, Update):
         self.pinned = pinned
         self.restriction_reason = restriction_reason
         self.fact_check = fact_check
+        self.suggested_post_info = suggested_post_info
         self.channel_post = channel_post
         self.raw = raw
 
@@ -861,8 +891,13 @@ class Message(Object, Update):
         video_chat_scheduled = None
         history_cleared = None
         video_chat_members_invited = None
-        refunded_payment = None
         successful_payment = None
+        refunded_payment = None
+        suggested_post_approval_failed = None
+        suggested_post_declined = None
+        suggested_post_approved = None
+        suggested_post_paid = None
+        suggested_post_refunded = None
         phone_call_ended = None
         phone_call_started = None
         giveaway_prize_stars = None
@@ -1016,12 +1051,28 @@ class Message(Object, Update):
         elif isinstance(action, raw.types.MessageActionInviteToGroupCall):
             service_type = enums.MessageServiceType.VIDEO_CHAT_MEMBERS_INVITED
             video_chat_members_invited = types.VideoChatMembersInvited._parse(client, action, users)
-        elif isinstance(action, raw.types.MessageActionPaymentRefunded):
-            service_type = enums.MessageServiceType.REFUNDED_PAYMENT
-            refunded_payment = types.RefundedPayment._parse(action)
         elif isinstance(action, (raw.types.MessageActionPaymentSent, raw.types.MessageActionPaymentSentMe)):
             service_type = enums.MessageServiceType.SUCCESSFUL_PAYMENT
             successful_payment = types.SuccessfulPayment._parse(action)
+        elif isinstance(action, raw.types.MessageActionPaymentRefunded):
+            service_type = enums.MessageServiceType.REFUNDED_PAYMENT
+            refunded_payment = types.RefundedPayment._parse(action)
+        elif isinstance(action, raw.types.MessageActionSuggestedPostApproval):
+            if action.balance_too_low:
+                service_type = enums.MessageServiceType.SUGGESTED_POST_APPROVAL_FAILED
+                suggested_post_approval_failed = types.SuggestedPostApprovalFailed._parse(action, message.reply_to)
+            elif action.rejected:
+                service_type = enums.MessageServiceType.SUGGESTED_POST_DECLINED
+                suggested_post_declined = types.SuggestedPostDeclined._parse(action, message.reply_to)
+            else:
+                service_type = enums.MessageServiceType.SUGGESTED_POST_APPROVED
+                suggested_post_approved = types.SuggestedPostApproved._parse(action, message.reply_to)
+        elif isinstance(action, raw.types.MessageActionSuggestedPostSuccess):
+            service_type = enums.MessageServiceType.SUGGESTED_POST_PAID
+            suggested_post_paid = types.SuggestedPostPaid._parse(action, message.reply_to)
+        elif isinstance(action, raw.types.MessageActionSuggestedPostRefund):
+            service_type = enums.MessageServiceType.SUGGESTED_POST_REFUNDED
+            suggested_post_refunded = types.SuggestedPostRefunded._parse(action, message.reply_to)
         elif isinstance(action, raw.types.MessageActionPhoneCall):
             if action.reason:
                 service_type = enums.MessageServiceType.PHONE_CALL_ENDED
@@ -1131,6 +1182,7 @@ class Message(Object, Update):
             gift_code=gift_code,
             gifted_premium=gifted_premium,
             gifted_stars=gifted_stars,
+            gifted_ton=gifted_ton,
             giveaway_created=giveaway_created,
             giveaway_completed=giveaway_completed,
             video_chat_ended=video_chat_ended,
@@ -1138,8 +1190,13 @@ class Message(Object, Update):
             video_chat_scheduled=video_chat_scheduled,
             history_cleared=history_cleared,
             video_chat_members_invited=video_chat_members_invited,
-            refunded_payment=refunded_payment,
             successful_payment=successful_payment,
+            refunded_payment=refunded_payment,
+            suggested_post_approval_failed=suggested_post_approval_failed,
+            suggested_post_declined=suggested_post_declined,
+            suggested_post_approved=suggested_post_approved,
+            suggested_post_paid=suggested_post_paid,
+            suggested_post_refunded=suggested_post_refunded,
             phone_call_ended=phone_call_ended,
             phone_call_started=phone_call_started,
             giveaway_prize_stars=giveaway_prize_stars,
@@ -1443,7 +1500,7 @@ class Message(Object, Update):
             media=media_type,
             paid_media=paid_media,
             checklist=checklist,
-            show_caption_above_media=getattr(message, "invert_media", None),
+            show_caption_above_media=message.invert_media,
             edit_date=utils.timestamp_to_datetime(message.edit_date),
             edit_hidden=message.edit_hide,
             media_group_id=message.grouped_id,
@@ -1460,7 +1517,7 @@ class Message(Object, Update):
             invoice=invoice,
             story=story,
             video=video,
-            video_processing_pending=getattr(message, "video_processing_pending", None),
+            video_processing_pending=message.video_processing_pending,
             video_note=video_note,
             sticker=sticker,
             document=document,
@@ -1470,23 +1527,24 @@ class Message(Object, Update):
             dice=dice,
             views=message.views,
             forwards=message.forwards,
-            sender_boost_count=getattr(message, "from_boosts_applied", None),
-            via_bot=types.User._parse(client, users.get(message.via_bot_id, None)),
+            sender_boost_count=message.from_boosts_applied,
+            via_bot=types.User._parse(client, users.get(message.via_bot_id)),
             outgoing=message.out,
             business_connection_id=business_connection_id,
             reply_markup=reply_markup,
             reactions=reactions,
-            from_offline=getattr(message, "offline", None),
-            send_paid_messages_stars=getattr(message, "paid_message_stars", None),
-            unread_media=getattr(message, "media_unread", None),
-            silent=getattr(message, "silent", None),
-            pinned=getattr(message, "pinned", None),
+            from_offline=message.offline,
+            send_paid_messages_stars=message.paid_message_stars,
+            unread_media=message.media_unread,
+            silent=message.silent,
+            pinned=message.pinned,
             restriction_reason=types.List(
                 types.RestrictionReason._parse(reason)
                 for reason in getattr(message, "restriction_reason", [])
             ) or None,
-            fact_check=types.FactCheck._parse(client, getattr(message, "fact_check", None), users),
-            channel_post=getattr(message, "post", None),
+            fact_check=types.FactCheck._parse(client, message.factcheck, users),
+            suggested_post_info=types.SuggestedPostInfo._parse(message.suggested_post),
+            channel_post=message.post,
             raw=message,
             client=client
         )
@@ -1788,6 +1846,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup=None,
 
         disable_web_page_preview: bool = None,
@@ -1873,6 +1932,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -1917,6 +1979,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
 
             disable_web_page_preview=disable_web_page_preview,
@@ -1944,6 +2007,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -2051,6 +2115,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -2122,6 +2189,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
             progress=progress,
             progress_args=progress_args,
@@ -2150,6 +2218,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -2247,6 +2316,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -2316,6 +2388,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
             progress=progress,
             progress_args=progress_args,
@@ -2339,6 +2412,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -2413,6 +2487,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -2453,6 +2530,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
 
             reply_to_message_id=reply_to_message_id,
@@ -2670,6 +2748,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -2773,6 +2852,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -2843,6 +2925,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
             progress=progress,
             progress_args=progress_args,
@@ -3316,6 +3399,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -3413,6 +3497,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -3482,6 +3569,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
             progress=progress,
             progress_args=progress_args,
@@ -3720,6 +3808,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -3805,6 +3894,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -3871,6 +3963,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
             progress=progress,
             progress_args=progress_args,
@@ -4061,6 +4154,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -4186,6 +4280,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -4262,6 +4359,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
             progress=progress,
             progress_args=progress_args,
@@ -4288,6 +4386,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -4380,6 +4479,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -4447,6 +4549,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
             progress=progress,
             progress_args=progress_args,
@@ -4474,6 +4577,7 @@ class Message(Object, Update):
         business_connection_id: str = None,
         allow_paid_broadcast: bool = None,
         paid_message_star_count: int = None,
+        suggested_post_info: "types.InputSuggestedPostInfo" = None,
         reply_markup: Union[
             "types.InlineKeyboardMarkup",
             "types.ReplyKeyboardMarkup",
@@ -4563,6 +4667,9 @@ class Message(Object, Update):
             paid_message_star_count (``int``, *optional*):
                 The number of Telegram Stars the user agreed to pay to send the messages.
 
+            suggested_post_info (:obj:`~pyrogram.types.InputSuggestedPostInfo`, *optional*):
+                Information about the suggested post.
+
             reply_markup (:obj:`~pyrogram.types.InlineKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardMarkup` | :obj:`~pyrogram.types.ReplyKeyboardRemove` | :obj:`~pyrogram.types.ForceReply`, *optional*):
                 Additional interface options. An object for an inline keyboard, custom reply keyboard,
                 instructions to remove reply keyboard or to force a reply from the user.
@@ -4630,6 +4737,7 @@ class Message(Object, Update):
             business_connection_id=business_connection_id,
             allow_paid_broadcast=allow_paid_broadcast,
             paid_message_star_count=paid_message_star_count,
+            suggested_post_info=suggested_post_info,
             reply_markup=reply_markup,
             progress=progress,
             progress_args=progress_args,

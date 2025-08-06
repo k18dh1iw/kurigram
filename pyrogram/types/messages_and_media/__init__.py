@@ -87,6 +87,7 @@ from .reply_parameters import ReplyParameters
 from .restriction_reason import RestrictionReason
 from .saved_credentials import SavedCredentials
 from .screenshot_taken import ScreenshotTaken
+from .star_amount import StarAmount
 from .gift_attribute import GiftAttribute
 from .gift import Gift
 from .gifted_premium import GiftedPremium
@@ -97,6 +98,13 @@ from .story_view import StoryView
 from .story import Story
 from .stripped_thumbnail import StrippedThumbnail
 from .successful_payment import SuccessfulPayment
+from .suggested_post_approval_failed import SuggestedPostApprovalFailed
+from .suggested_post_approved import SuggestedPostApproved
+from .suggested_post_declined import SuggestedPostDeclined
+from .suggested_post_info import SuggestedPostInfo
+from .suggested_post_paid import SuggestedPostPaid
+from .suggested_post_refunded import SuggestedPostRefunded
+from .suggested_post_price import SuggestedPostPrice, SuggestedPostPriceStar, SuggestedPostPriceTon
 from .text_quote import TextQuote
 from .thumbnail import Thumbnail
 from .upgraded_gift_attribute_id_backdrop import UpgradedGiftAttributeIdBackdrop
@@ -183,6 +191,7 @@ __all__ = [
     "RestrictionReason",
     "SavedCredentials",
     "ScreenshotTaken",
+    "StarAmount",
     "GiftAttribute",
     "Gift",
     "GiftedPremium",
@@ -193,6 +202,15 @@ __all__ = [
     "Story",
     "StrippedThumbnail",
     "SuccessfulPayment",
+    "SuggestedPostInfo",
+    "SuggestedPostApprovalFailed",
+    "SuggestedPostApproved",
+    "SuggestedPostDeclined",
+    "SuggestedPostRefunded",
+    "SuggestedPostPaid",
+    "SuggestedPostPrice",
+    "SuggestedPostPriceStar",
+    "SuggestedPostPriceTon",
     "TextQuote",
     "Thumbnail",
     "UpgradedGiftAttributeIdBackdrop",
