@@ -21,6 +21,7 @@ from .get_global_privacy_settings import GetGlobalPrivacySettings
 from .get_privacy import GetPrivacy
 from .set_account_ttl import SetAccountTTL
 from .set_global_privacy_settings import SetGlobalPrivacySettings
+from .set_inactive_session_ttl import SetInactiveSessionTTL
 from .set_privacy import SetPrivacy
 
 class Account(
@@ -29,6 +30,7 @@ class Account(
     GetPrivacy,
     SetAccountTTL,
     SetGlobalPrivacySettings,
+    SetInactiveSessionTTL,
     SetPrivacy
 ):
     pass

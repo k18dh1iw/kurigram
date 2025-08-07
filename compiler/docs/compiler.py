@@ -560,6 +560,7 @@ def pyrogram_api():
             set_privacy
             get_privacy
             set_global_privacy_settings
+            set_inactive_session_ttl
             get_global_privacy_settings
         """
     )
