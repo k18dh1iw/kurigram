@@ -752,6 +752,10 @@ def pyrogram_api():
             GiftedStars
             GiftedTon
             UpgradedGiftAttributeId
+            InputChatPhoto
+            InputChatPhotoPrevious
+            InputChatPhotoStatic
+            InputChatPhotoAnimation
         """,
         bot_keyboards="""
         Bot keyboards
