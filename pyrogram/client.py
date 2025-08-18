@@ -564,7 +564,6 @@ class Client(Methods):
         await qr_login.recreate()
 
         qr = QRCode(version=1)
-        signed_in = None
 
         while True:
             try:
