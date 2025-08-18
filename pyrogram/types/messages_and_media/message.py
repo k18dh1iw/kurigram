@@ -1071,19 +1071,19 @@ class Message(Object, Update):
         elif isinstance(action, raw.types.MessageActionSuggestedPostApproval):
             if action.balance_too_low:
                 service_type = enums.MessageServiceType.SUGGESTED_POST_APPROVAL_FAILED
-                suggested_post_approval_failed = types.SuggestedPostApprovalFailed._parse(action, message.reply_to)
+                suggested_post_approval_failed = await types.SuggestedPostApprovalFailed._parse(client, message)
             elif action.rejected:
                 service_type = enums.MessageServiceType.SUGGESTED_POST_DECLINED
-                suggested_post_declined = types.SuggestedPostDeclined._parse(action, message.reply_to)
+                suggested_post_declined = await types.SuggestedPostDeclined._parse(client, message)
             else:
                 service_type = enums.MessageServiceType.SUGGESTED_POST_APPROVED
-                suggested_post_approved = types.SuggestedPostApproved._parse(action, message.reply_to)
+                suggested_post_approved = await types.SuggestedPostApproved._parse(client, message)
         elif isinstance(action, raw.types.MessageActionSuggestedPostSuccess):
             service_type = enums.MessageServiceType.SUGGESTED_POST_PAID
-            suggested_post_paid = types.SuggestedPostPaid._parse(action, message.reply_to)
+            suggested_post_paid = await types.SuggestedPostPaid._parse(client, message)
         elif isinstance(action, raw.types.MessageActionSuggestedPostRefund):
             service_type = enums.MessageServiceType.SUGGESTED_POST_REFUNDED
-            suggested_post_refunded = types.SuggestedPostRefunded._parse(action, message.reply_to)
+            suggested_post_refunded = await types.SuggestedPostRefunded._parse(client, message)
         elif isinstance(action, raw.types.MessageActionPhoneCall):
             if action.reason:
                 service_type = enums.MessageServiceType.PHONE_CALL_ENDED
