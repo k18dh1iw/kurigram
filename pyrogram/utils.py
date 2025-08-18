@@ -16,11 +16,6 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from concurrent.futures.thread import ThreadPoolExecutor
-from datetime import datetime, timezone
-from getpass import getpass
-from io import BytesIO
-from typing import Union, List, Dict, Optional
 import asyncio
 import base64
 import functools
@@ -28,12 +23,16 @@ import hashlib
 import os
 import re
 import struct
+from concurrent.futures.thread import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
+from getpass import getpass
+from io import BytesIO
+from typing import Dict, List, Optional, Union
 
 import pyrogram
-from pyrogram import raw, enums
-from pyrogram import types
+from pyrogram import enums, raw, types
+from pyrogram.file_id import DOCUMENT_TYPES, PHOTO_TYPES, FileId, FileType
 from pyrogram.types.messages_and_media.message import Str
-from pyrogram.file_id import FileId, FileType, PHOTO_TYPES, DOCUMENT_TYPES
 
 
 async def ainput(prompt: str = "", *, hide: bool = False, loop: Optional[asyncio.AbstractEventLoop] = None):
@@ -531,8 +530,11 @@ def timestamp_to_datetime(ts: Optional[int]) -> Optional[datetime]:
     return datetime.fromtimestamp(ts) if ts else None
 
 
-def datetime_to_timestamp(dt: Optional[datetime]) -> Optional[int]:
-    return int(dt.timestamp()) if dt else None
+def datetime_to_timestamp(dt: Optional[Union[datetime, timedelta]]) -> Optional[int]:
+    if isinstance(dt, timedelta):
+        return int((datetime.now() + dt).timestamp())
+    elif isinstance(dt, datetime):
+        return int(dt.timestamp())
 
 
 def get_first_url(text):
