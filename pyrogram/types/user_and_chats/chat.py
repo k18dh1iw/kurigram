@@ -208,6 +208,16 @@ class Chat(Object):
             The last message in the personal channel of this chat.
             Returned only in :meth:`~pyrogram.Client.get_chat`.
 
+        linked_chat_id (``int``, *optional*):
+            Chat identifier of a discussion group for the channel,
+            or a channel, for which the supergroup is the designated discussion group.
+            Returned only in :meth:`~pyrogram.Client.get_chat`.
+
+        direct_messages_chat_id (``int``, *optional*):
+            Chat identifier of a direct messages group for the channel,
+            or a channel, for which the supergroup is the designated direct messages group.
+            Returned only in :meth:`~pyrogram.Client.get_chat`.
+
         parent_chat (:obj:`~pyrogram.types.Chat`, *optional*):
             Information about the corresponding channel chat.
             For direct messages chats only.
@@ -538,6 +548,8 @@ class Chat(Object):
         permissions: Optional["types.ChatPermissions"] = None,
         personal_channel: Optional["types.Chat"] = None,
         personal_channel_message: Optional["types.Message"] = None,
+        linked_chat_id: Optional[int] = None,
+        direct_messages_chat_id: Optional[int] = None,
         parent_chat: Optional["types.Chat"] = None,
         linked_chat: Optional["types.Chat"] = None,
         send_as_chat: Optional["types.Chat"] = None,
@@ -666,6 +678,8 @@ class Chat(Object):
         self.permissions = permissions
         self.personal_channel = personal_channel
         self.personal_channel_message = personal_channel_message
+        self.linked_chat_id = linked_chat_id
+        self.direct_messages_chat_id = direct_messages_chat_id
         self.parent_chat = parent_chat
         self.linked_chat = linked_chat
         self.send_as_chat = send_as_chat
@@ -1109,9 +1123,11 @@ class Chat(Object):
         parsed_chat.folder_id = channel.folder_id
 
         if chats.get(channel.linked_chat_id):
+            parsed_chat.linked_chat_id = utils.get_channel_id(channel.linked_chat_id)
             parsed_chat.linked_chat = Chat._parse_channel_chat(client, chats[channel.linked_chat_id])
 
         if chats.get(chats[channel.id].linked_monoforum_id):
+            parsed_chat.direct_messages_chat_id = utils.get_channel_id(chats[channel.id].linked_monoforum_id)
             parsed_chat.parent_chat = Chat._parse_channel_chat(client, chats[chats[channel.id].linked_monoforum_id])
 
         # parsed_chat.location
