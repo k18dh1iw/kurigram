@@ -29,32 +29,35 @@ from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from hashlib import sha256
 from importlib import import_module
-from io import StringIO, BytesIO
+from io import BytesIO, StringIO
 from mimetypes import MimeTypes
 from pathlib import Path
-from typing import Union, List, Optional, Callable, AsyncGenerator, Type
+from typing import AsyncGenerator, Callable, List, Optional, Type, Union
 
 import pyrogram
-from pyrogram import __version__, __license__
-from pyrogram import enums
-from pyrogram import raw
-from pyrogram import utils
+from pyrogram import __license__, __version__, enums, raw, utils
 from pyrogram.crypto import aes
-from pyrogram.errors import CDNFileHashMismatch
 from pyrogram.errors import (
+    AuthBytesInvalid,
+    BadRequest,
+    CDNFileHashMismatch,
+    ChannelPrivate,
+    EmailNotAllowed,
+    FloodPremiumWait,
+    FloodWait,
+    PersistentTimestampInvalid,
+    PersistentTimestampOutdated,
     SessionPasswordNeeded,
-    VolumeLocNotFound, ChannelPrivate,
-    BadRequest, AuthBytesInvalid,
-    FloodWait, FloodPremiumWait,
-    PersistentTimestampInvalid, PersistentTimestampOutdated
+    VolumeLocNotFound,
 )
 from pyrogram.handlers.handler import Handler
 from pyrogram.methods import Methods
-from pyrogram.session import Auth, Session
-from pyrogram.storage import Storage, FileStorage, MemoryStorage
-from pyrogram.types import User, TermsOfService, LinkPreviewOptions
-from pyrogram.utils import ainput
 from pyrogram.qrlogin import QRLogin
+from pyrogram.session import Auth, Session
+from pyrogram.storage import FileStorage, MemoryStorage, Storage
+from pyrogram.types import LinkPreviewOptions, TermsOfService, User
+from pyrogram.utils import ainput
+
 from .connection import Connection
 from .connection.transport import TCP, TCPAbridged
 from .dispatcher import Dispatcher
@@ -475,16 +478,53 @@ class Client(Methods):
             else:
                 break
 
-        sent_code_descriptions = {
-            enums.SentCodeType.APP: "Telegram app",
-            enums.SentCodeType.SMS: "SMS",
-            enums.SentCodeType.CALL: "phone call",
-            enums.SentCodeType.FLASH_CALL: "phone flash call",
-            enums.SentCodeType.FRAGMENT_SMS: "Fragment SMS",
-            enums.SentCodeType.EMAIL_CODE: "email code"
-        }
+        if sent_code.type == enums.SentCodeType.SETUP_EMAIL_REQUIRED:
+            print("Setup email required for authorization")
 
-        print(f"The confirmation code has been sent via {sent_code_descriptions[sent_code.type]}")
+            while True:
+                try:
+                    email = await ainput("Enter email: ", loop=self.loop)
+
+                    await self.app.invoke(
+                        raw.functions.account.SendVerifyEmailCode(
+                            purpose=raw.types.EmailVerifyPurposeLoginSetup(
+                                phone_number=self.phone_number,
+                                phone_code_hash=sent_code.phone_code_hash,
+                            ),
+                            email=email,
+                        )
+                    )
+
+                    email_code = await ainput("Enter confirmation code: ", loop=self.loop)
+
+                    try:
+                        await self.app.invoke(
+                            raw.functions.account.VerifyEmail(
+                                purpose=raw.types.EmailVerifyPurposeLoginSetup(
+                                    phone_number=self.phone_number,
+                                    phone_code_hash=sent_code.phone_code_hash,
+                                ),
+                                verification=raw.types.EmailVerificationCode(code=email_code),
+                            )
+                        )
+                    except EmailNotAllowed:
+                        print("This email is not allowed for authorization")
+                        continue
+                except BadRequest as e:
+                    print(e.MESSAGE)
+                else:
+                    break
+        else:
+            sent_code_descriptions = {
+                enums.SentCodeType.APP: "Telegram app",
+                enums.SentCodeType.SMS: "SMS",
+                enums.SentCodeType.CALL: "phone call",
+                enums.SentCodeType.FLASH_CALL: "phone flash call",
+                enums.SentCodeType.FRAGMENT_SMS: "Fragment",
+                enums.SentCodeType.EMAIL_CODE: "email code"
+            }
+
+            print(f"The confirmation code has been sent via {sent_code_descriptions[sent_code.type]}")
 
         while True:
             if not self.phone_code:
