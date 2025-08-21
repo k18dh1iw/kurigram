@@ -302,16 +302,31 @@ MAX_USER_ID = (1 << 40) - 1
 MAX_CHAT_ID = 999999999999
 
 
-def get_raw_peer_id(peer: Union[raw.base.Peer, raw.base.InputPeer, raw.base.RequestedPeer]) -> Optional[int]:
-    """Get the raw peer id from a Peer object"""
-    if hasattr(peer, "user_id"):
-        return peer.user_id
+def get_raw_peer_id(peer: Union[int, raw.base.Peer, raw.base.InputPeer, raw.base.RequestedPeer]) -> Optional[int]:
+    """Get the raw peer id from a Peer object or high-lvl id"""
 
-    if hasattr(peer, "chat_id"):
-        return peer.chat_id
+    if isinstance(peer, int):
+        if peer < 0:
+            if -MAX_CHAT_ID <= peer:
+                return -peer
 
-    if hasattr(peer, "channel_id"):
-        return peer.channel_id
+            if ZERO_CHANNEL_ID - MAX_CHANNEL_ID <= peer and peer != ZERO_CHANNEL_ID:
+                return ZERO_CHANNEL_ID - peer
+
+            if ZERO_CHANNEL_ID - MAX_MONOFORUM_CHANNEL_ID <= peer:
+                return ZERO_CHANNEL_ID - peer
+
+        elif 0 < peer <= MAX_USER_ID:
+            return peer
+    else:
+        if hasattr(peer, "user_id"):
+            return peer.user_id
+
+        if hasattr(peer, "chat_id"):
+            return peer.chat_id
+
+        if hasattr(peer, "channel_id"):
+            return peer.channel_id
 
     return None
 
