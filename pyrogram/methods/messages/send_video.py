@@ -39,6 +39,7 @@ class SendVideo:
         caption_entities: List["types.MessageEntity"] = None,
         has_spoiler: bool = None,
         ttl_seconds: int = None,
+        view_once: bool = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
@@ -115,6 +116,10 @@ class SendVideo:
                 Self-Destruct Timer.
                 If you set a timer, the video will self-destruct in *ttl_seconds*
                 seconds after it was viewed.
+
+            view_once (``bool``, *optional*):
+                Self-Destruct Timer.
+                If True, the photo will self-destruct after it was viewed.
 
             duration (``int``, *optional*):
                 Duration of sent video in seconds.
@@ -238,6 +243,9 @@ class SendVideo:
                 # Send self-destructing video
                 await app.send_video("me", "video.mp4", ttl_seconds=10)
 
+                # Send view-once video
+                await app.send_video("me", "video.mp4", view_once=True)
+
                 # Add video_cover to the video
                 await app.send_video(channel_id, "video.mp4", video_cover="photo.jpg")
 
@@ -349,7 +357,7 @@ class SendVideo:
                     media = raw.types.InputMediaUploadedDocument(
                         mime_type=self.guess_mime_type(video) or "video/mp4",
                         file=file,
-                        ttl_seconds=ttl_seconds,
+                        ttl_seconds=(1 << 31) - 1 if view_once else ttl_seconds,
                         spoiler=has_spoiler,
                         thumb=thumb,
                         video_cover=vcover_file,
@@ -368,13 +376,13 @@ class SendVideo:
                 elif re.match("^https?://", video):
                     media = raw.types.InputMediaDocumentExternal(
                         url=video,
-                        ttl_seconds=ttl_seconds,
+                        ttl_seconds=(1 << 31) - 1 if view_once else ttl_seconds,
                         spoiler=has_spoiler,
                         video_cover=vcover_file,
                         video_timestamp=video_start_timestamp
                     )
                 else:
-                    media = utils.get_input_media_from_file_id(video, FileType.VIDEO, ttl_seconds=ttl_seconds, has_spoiler=has_spoiler)
+                    media = utils.get_input_media_from_file_id(video, FileType.VIDEO, ttl_seconds=(1 << 31) - 1 if view_once else ttl_seconds, has_spoiler=has_spoiler)
                     media.video_cover = vcover_file
                     media.video_timestamp = video_start_timestamp
             else:
@@ -383,7 +391,7 @@ class SendVideo:
                 media = raw.types.InputMediaUploadedDocument(
                     mime_type=self.guess_mime_type(file_name or video.name) or "video/mp4",
                     file=file,
-                    ttl_seconds=ttl_seconds,
+                    ttl_seconds=(1 << 31) - 1 if view_once else ttl_seconds,
                     spoiler=has_spoiler,
                     thumb=thumb,
                     video_cover=vcover_file,

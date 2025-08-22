@@ -4151,6 +4151,7 @@ class Message(Object, Update):
         has_spoiler: bool = None,
         show_caption_above_media: bool = None,
         ttl_seconds: int = None,
+        view_once: bool = None,
         duration: int = 0,
         width: int = 0,
         height: int = 0,
@@ -4229,6 +4230,10 @@ class Message(Object, Update):
                 Self-Destruct Timer.
                 If you set a timer, the video will self-destruct in *ttl_seconds*
                 seconds after it was viewed.
+
+            view_once (``bool``, *optional*):
+                Self-Destruct Timer.
+                If True, the photo will self-destruct after it was viewed.
 
             duration (``int``, *optional*):
                 Duration of sent video in seconds.
@@ -4356,6 +4361,7 @@ class Message(Object, Update):
             has_spoiler=has_spoiler,
             show_caption_above_media=show_caption_above_media,
             ttl_seconds=ttl_seconds,
+            view_once=view_once,
             duration=duration,
             width=width,
             height=height,

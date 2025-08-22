@@ -194,6 +194,9 @@ class SendPhoto:
 
                 # Send self-destructing photo
                 await app.send_photo("me", "photo.jpg", ttl_seconds=10)
+
+                # Send view-once photo
+                await app.send_photo("me", "photo.jpg", view_once=True)
         """
         if any(
             (
