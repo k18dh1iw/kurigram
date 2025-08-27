@@ -752,6 +752,7 @@ def pyrogram_api():
             ChatTheme
             GiftedStars
             GiftedTon
+            UpgradedGiftAttributeId
             UpgradedGiftAttributeIdModel
             UpgradedGiftAttributeIdSymbol
             UpgradedGiftAttributeIdBackdrop
