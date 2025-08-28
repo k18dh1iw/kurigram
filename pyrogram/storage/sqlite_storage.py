@@ -17,7 +17,6 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 import base64
-import inspect
 import logging
 import sqlite3
 import struct
@@ -37,13 +36,15 @@ log = logging.getLogger(__name__)
 SCHEMA = """
 CREATE TABLE sessions
 (
-    dc_id     INTEGER PRIMARY KEY,
-    api_id    INTEGER,
-    test_mode INTEGER,
-    auth_key  BLOB,
-    date      INTEGER NOT NULL,
-    user_id   INTEGER,
-    is_bot    INTEGER
+    dc_id          INTEGER PRIMARY KEY,
+    server_address TEXT,
+    port           INTEGER,
+    api_id         INTEGER,
+    test_mode      INTEGER,
+    auth_key       BLOB,
+    date           INTEGER NOT NULL,
+    user_id        INTEGER,
+    is_bot         INTEGER
 );
 
 CREATE TABLE peers
@@ -113,6 +114,14 @@ CREATE TABLE update_state
 );
 """
 
+PROD = {
+    1: "149.154.175.53",
+    2: "149.154.167.51",
+    3: "149.154.175.100",
+    4: "149.154.167.91",
+    5: "91.108.56.130",
+    203: "91.105.192.100"
+}
 
 def get_input_peer(peer_id: int, access_hash: int, peer_type: str):
     if peer_type in ["user", "bot"]:
@@ -136,7 +145,7 @@ def get_input_peer(peer_id: int, access_hash: int, peer_type: str):
 
 
 class SQLiteStorage(Storage):
-    VERSION = 6
+    VERSION = 7
     USERNAME_TTL = 8 * 60 * 60
     FILE_EXTENSION = ".session"
 
@@ -161,18 +170,18 @@ class SQLiteStorage(Storage):
         else:
             self.database = workdir / (self.name + self.FILE_EXTENSION)
 
-    def update(self):
-        version = self.version()
+    async def update(self):
+        version = await self.version()
 
         if version == 1:
             with self.conn:
-                self.conn.execute("DELETE FROM peers")
+                self.conn.execute("DELETE FROM peers;")
 
             version += 1
 
         if version == 2:
             with self.conn:
-                self.conn.execute("ALTER TABLE sessions ADD api_id INTEGER")
+                self.conn.execute("ALTER TABLE sessions ADD api_id INTEGER;")
 
             version += 1
 
@@ -194,23 +203,35 @@ class SQLiteStorage(Storage):
 
             version += 1
 
-        self.version(version)
+        if version == 6:
+            address = PROD[await self.dc_id()]
 
-    def create(self):
+            with self.conn:
+                self.conn.execute("ALTER TABLE sessions ADD server_address TEXT;")
+                self.conn.execute("ALTER TABLE sessions ADD port INTEGER;")
+
+                self.conn.execute("UPDATE sessions SET server_address = ?;", (address,))
+                self.conn.execute("UPDATE sessions SET port = 443;")
+
+            version += 1
+
+        await self.version(version)
+
+    async def create(self):
         with self.conn:
             self.conn.executescript(SCHEMA)
 
             self.conn.execute("INSERT INTO version VALUES (?)", (self.VERSION,))
 
             self.conn.execute(
-                "INSERT INTO sessions VALUES (?, ?, ?, ?, ?, ?, ?)",
-                (2, None, None, None, 0, None, None),
+                "INSERT INTO sessions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (2, "149.154.167.51", 443, None, None, None, 0, None, None),
             )
 
     async def open(self):
         if self.in_memory:
             self.conn = sqlite3.connect(":memory:", timeout=1, check_same_thread=False)
-            self.create()
+            await self.create()
 
             if self.session_string:
                 # Old format
@@ -249,6 +270,8 @@ class SQLiteStorage(Storage):
                 )
 
                 await self.dc_id(dc_id)
+                await self.server_address(PROD[dc_id])
+                await self.port(443)
                 await self.api_id(api_id)
                 await self.test_mode(test_mode)
                 await self.auth_key(auth_key)
@@ -269,9 +292,9 @@ class SQLiteStorage(Storage):
             self.conn.execute("PRAGMA journal_mode=DELETE")
 
         if file_exists:
-            self.update()
+            await self.update()
         else:
-            self.create()
+            await self.create()
 
         with self.conn:
             self.conn.execute("VACUUM")
@@ -301,7 +324,7 @@ class SQLiteStorage(Storage):
         )
 
     async def update_state(self, value: Tuple[int, int, int, int, int] = object):
-        if value == object:
+        if value is object:
             return self.conn.execute(
                 "SELECT id, pts, qts, date, seq FROM update_state ORDER BY date ASC"
             ).fetchall()
@@ -310,7 +333,7 @@ class SQLiteStorage(Storage):
                 self.conn.execute("DELETE FROM update_state WHERE id = ?", (value,))
             else:
                 self.conn.execute(
-                    "REPLACE INTO update_state (id, pts, qts, date, seq)VALUES (?, ?, ?, ?, ?)",
+                    "REPLACE INTO update_state (id, pts, qts, date, seq) VALUES (?, ?, ?, ?, ?)",
                     value,
                 )
 
@@ -351,44 +374,42 @@ class SQLiteStorage(Storage):
 
         return get_input_peer(*r)
 
-    def _get(self):
-        attr = inspect.stack()[2].function
+    async def _get(self, table: str, attr: str):
+        return self.conn.execute(f"SELECT {attr} FROM {table}").fetchone()[0]
 
-        return self.conn.execute(f"SELECT {attr} FROM sessions").fetchone()[0]
-
-    def _set(self, value: Any):
-        attr = inspect.stack()[2].function
-
+    async def _set(self, table: str, attr: str, value: Any):
         with self.conn:
-            self.conn.execute(f"UPDATE sessions SET {attr} = ?", (value,))
+            self.conn.execute(f"UPDATE {table} SET {attr} = ?", (value,))
 
-    def _accessor(self, value: Any = object):
-        return self._get() if value == object else self._set(value)
+    async def _accessor(self, table: str, attr: str, value: Any = object):
+        return await self._get(table, attr) if value is object else await self._set(table, attr, value)
 
     async def dc_id(self, value: int = object):
-        return self._accessor(value)
+        return await self._accessor("sessions", "dc_id", value)
+
+    async def server_address(self, value: str = object):
+        return await self._accessor("sessions", "server_address", value)
+
+    async def port(self, value: int = object):
+        return await self._accessor("sessions", "port", value)
 
     async def api_id(self, value: int = object):
-        return self._accessor(value)
+        return await self._accessor("sessions", "api_id", value)
 
     async def test_mode(self, value: bool = object):
-        return self._accessor(value)
+        return await self._accessor("sessions", "test_mode", value)
 
     async def auth_key(self, value: bytes = object):
-        return self._accessor(value)
+        return await self._accessor("sessions", "auth_key", value)
 
     async def date(self, value: int = object):
-        return self._accessor(value)
+        return await self._accessor("sessions", "date", value)
 
     async def user_id(self, value: int = object):
-        return self._accessor(value)
+        return await self._accessor("sessions", "user_id", value)
 
     async def is_bot(self, value: bool = object):
-        return self._accessor(value)
+        return await self._accessor("sessions", "is_bot", value)
 
-    def version(self, value: int = object):
-        if value == object:
-            return self.conn.execute("SELECT number FROM version").fetchone()[0]
-        else:
-            with self.conn:
-                self.conn.execute("UPDATE version SET number = ?", (value,))
+    async def version(self, value: int = object):
+        return await self._accessor("version", "number", value)

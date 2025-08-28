@@ -159,6 +159,26 @@ class Storage(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    async def server_address(self, value: str = object):
+        """Get or set the server address of the current session.
+
+        Parameters:
+            value (``str``, *optional*):
+                The server address to set.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    async def port(self, value: int = object):
+        """Get or set the server port of the current session.
+
+        Parameters:
+            value (``int``, *optional*):
+                The server port to set.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     async def test_mode(self, value: bool = object):
         """Get or set the test mode of the current session.
 
