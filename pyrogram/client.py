@@ -25,6 +25,7 @@ import platform
 import re
 import shutil
 import sys
+import time
 from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from hashlib import sha256
@@ -373,6 +374,10 @@ class Client(Methods):
         self.dispatcher: Dispatcher = Dispatcher(self)
 
         self.rnd_id = MsgId
+        self._last_sync_time = time.time()
+        self._last_monotonic = time.monotonic()
+
+        self._is_server_time_synced = False
 
         self.parser: Parser = Parser(self)
 
@@ -1503,6 +1508,18 @@ class Client(Methods):
             log.info("Changed session DC%s address to %s:%s", dc_id, server_address, port)
         else:
             log.info("Session DC%s address is already %s:%s", dc_id, server_address, port)
+
+    @property
+    def server_time(self) -> float:
+        return self._last_sync_time + (time.monotonic() - self._last_monotonic)
+
+    def _set_server_time(self, msg_id: int):
+        if self._is_server_time_synced:
+            return
+
+        self._last_sync_time = msg_id / float(2**32)
+        self._last_monotonic = time.monotonic()
+        log.info(f"Time synced: {utils.timestamp_to_datetime(self._last_sync_time)}")
 
     def guess_mime_type(self, filename: Union[str, BytesIO]) -> Optional[str]:
         if isinstance(filename, BytesIO):

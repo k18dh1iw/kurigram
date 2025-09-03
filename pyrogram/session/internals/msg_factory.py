@@ -19,14 +19,19 @@
 import asyncio
 import time
 
+import pyrogram
 from pyrogram.raw.core import Message, MsgContainer, TLObject
 from pyrogram.raw.functions import Ping
 from pyrogram.raw.types import HttpWait, MsgsAck
 
 
 class MsgFactory:
-    def __init__(self):
+    def __init__(self, client: "pyrogram.Client"):
+        self.client = client
+
         self._last_msg_id = 0
+        self._last_sync_time = 0
+        self._last_monotonic = time.monotonic()
 
         self._msg_id_lock = asyncio.Lock()
         self._seq_no_lock = asyncio.Lock()
@@ -35,9 +40,7 @@ class MsgFactory:
 
     async def allocate_message_identity(self) -> int:
         async with self._msg_id_lock:
-            now = time.time()
-
-            base_msg_id = int(now * (2**32)) & ~0b11
+            base_msg_id = int(self.client.server_time * (2**32)) & ~0b11
 
             if base_msg_id <= self._last_msg_id:
                 base_msg_id = self._last_msg_id + 4
