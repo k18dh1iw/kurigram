@@ -435,6 +435,7 @@ def pyrogram_api():
             get_gift_upgrade_preview
             get_payment_form
             get_stars_balance
+            get_ton_balance
             get_upgraded_gift
             gift_premium_with_stars
             hide_gift
