@@ -374,6 +374,7 @@ def pyrogram_api():
             transfer_chat_ownership
             get_suitable_discussion_chats
             set_chat_discussion_group
+            set_main_profile_tab
         """,
         users="""
         Users
@@ -1135,6 +1136,7 @@ def pyrogram_api():
             PollType
             PrivacyKey
             ProfileColor
+            ProfileTab
             ReplyColor
             SentCodeType
             StoriesPrivacyRules
