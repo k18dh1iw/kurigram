@@ -1355,7 +1355,14 @@ class Client(Methods):
         if not temporary and sessions.get(dc_id):
             return sessions[dc_id]
 
-        dc_option = await self.get_dc_option(dc_id, is_media=is_media, ipv6=self.ipv6, is_cdn=is_cdn)
+        if not server_address or not port:
+            dc_option = await self.get_dc_option(dc_id, is_media=is_media, ipv6=self.ipv6, is_cdn=is_cdn)
+
+            server_address = server_address or dc_option.ip_address
+            port = port or dc_option.port
+        else:
+            server_address = server_address or await self.storage.server_address()
+            port = port or await self.storage.port()
 
         if is_media:
             auth_key = (await self.get_session(dc_id)).auth_key
@@ -1364,8 +1371,8 @@ class Client(Methods):
                 auth_key = await Auth(
                     self,
                     dc_id,
-                    server_address or dc_option.ip_address,
-                    port or dc_option.port,
+                    server_address,
+                    port,
                     await self.storage.test_mode()
                 ).create()
             else:
@@ -1374,8 +1381,8 @@ class Client(Methods):
         session = Session(
             self,
             dc_id,
-            server_address or dc_option.ip_address,
-            port or dc_option.port,
+            server_address,
+            port,
             auth_key,
             await self.storage.test_mode(),
             is_media=is_media
