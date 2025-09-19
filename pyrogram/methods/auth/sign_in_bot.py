@@ -64,7 +64,7 @@ class SignInBot:
                 await self.storage.server_address(dc_option.ip_address)
                 await self.storage.port(dc_option.port)
 
-                self.session = self.get_session(temporary=True, export_authorization=False)
+                self.session = await self.get_session(temporary=True, export_authorization=False)
             else:
                 await self.storage.user_id(r.user.id)
                 await self.storage.is_bot(True)

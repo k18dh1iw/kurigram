@@ -38,7 +38,7 @@ class Connect:
 
         await self.load_session()
 
-        self.session = self.get_session(
+        self.session = await self.get_session(
             server_address=await self.storage.server_address(),
             port=await self.storage.port(),
             export_authorization=False,
