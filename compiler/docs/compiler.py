@@ -381,7 +381,9 @@ def pyrogram_api():
             get_me
             get_users
             get_chat_photos
+            get_chat_audios
             get_chat_photos_count
+            get_chat_audios_count
             set_profile_photo
             set_personal_channel
             delete_profile_photos
@@ -569,6 +571,9 @@ def pyrogram_api():
         """,
         account="""
         Account
+            add_profile_audio
+            remove_profile_audio
+            set_profile_audio_position
             get_account_ttl
             set_account_ttl
             set_privacy
