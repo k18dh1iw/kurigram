@@ -76,7 +76,7 @@ class QRLogin:
         )
 
         if isinstance(r, raw.types.auth.LoginTokenMigrateTo):
-            dc_option = await self.client.get_dc_option(r.dc_id, ipv6=self.ipv6)
+            dc_option = await self.client.get_dc_option(r.dc_id, ipv6=self.client.ipv6)
             await self.client.session.stop()
 
             self.client.session = await self.client.get_session(
