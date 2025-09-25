@@ -53,6 +53,7 @@ from .get_stickers import GetStickers
 from .get_web_app_link_url import GetWebAppLinkUrl
 from .get_web_app_url import GetWebAppUrl
 from .mark_checklist_tasks_as_done import MarkChecklistTasksAsDone
+from .open_web_app import OpenWebApp
 from .read_chat_history import ReadChatHistory
 from .read_mentions import ReadMentions
 from .read_reactions import ReadReactions
@@ -117,6 +118,7 @@ class Messages(
     GetWebAppLinkUrl,
     GetWebAppUrl,
     MarkChecklistTasksAsDone,
+    OpenWebApp,
     SendAudio,
     SendChatAction,
     SendChecklist,

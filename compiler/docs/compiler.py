@@ -263,6 +263,7 @@ def pyrogram_api():
             get_web_app_link_url
             get_web_app_url
             mark_checklist_tasks_as_done
+            open_web_app
             get_media_group
             get_chat_history
             get_chat_history_count
