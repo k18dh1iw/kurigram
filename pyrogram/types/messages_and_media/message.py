@@ -1882,6 +1882,7 @@ class Message(Object, Update):
         Use as a shortcut for:
 
         .. code-block:: python
+        
             from pyrogram import types
 
             await client.send_message(
