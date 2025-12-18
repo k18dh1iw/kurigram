@@ -16,30 +16,34 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Union
+from typing import Optional
 
-import pyrogram
-from pyrogram import raw, types
+from pyrogram import raw
+
+from ..object import Object
 
 
-class GetBoostsStatus:
-    async def get_boosts_status(
-        self: "pyrogram.Client",
-        chat_id: Union[int, str]
-    ) -> "types.BoostsStatus":
-        """Get boosts status of channel
+class GiftAuction(Object):
+    """Describes an auction on which a gift can be purchased.
 
-        .. include:: /_includes/usable-by/users.rst
+    Parameters:
+        id (``str``):
+            Identifier of the auction.
 
-        Parameters:
-            chat_id (``int`` | ``str``):
-                Unique identifier (int) or username (str) of the target chat.
+        gifts_per_round (``int``):
+            Number of gifts distributed in each round.
+    """
 
-        Returns:
-            :obj:`~pyrogram.types.BoostsStatus`: On success.
-        """
-        r = await self.invoke(
-            raw.functions.premium.GetBoostsStatus(peer=await self.resolve_peer(chat_id))
-        )
+    def __init__(self, *, id: str, gifts_per_round: int):
+        super().__init__()
 
-        return types.BoostsStatus._parse(r)
+        self.id = id
+        self.gifts_per_round = gifts_per_round
+
+    @staticmethod
+    def _parse(gift: "raw.types.StarGift") -> Optional["GiftAuction"]:
+        if gift.auction_slug:
+            return GiftAuction(
+                id=gift.auction_slug,
+                gifts_per_round=gift.gifts_per_round,
+            )

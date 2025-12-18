@@ -27,6 +27,7 @@ from .drop_gift_original_details import DropGiftOriginalDetails
 from .edit_star_subscription import EditStarSubscription
 from .get_available_gifts import GetAvailableGifts
 from .get_chat_gifts import GetChatGifts
+from .get_gift_auction_state import GetGiftAuctionState
 from .get_chat_gifts_count import GetChatGiftsCount
 from .get_gift_collections import GetGiftCollections
 from .get_gift_upgrade_preview import GetGiftUpgradePreview
@@ -37,6 +38,8 @@ from .get_upgraded_gift import GetUpgradedGift
 from .get_upgraded_gift_value_info import GetUpgradedGiftValueInfo
 from .gift_premium_with_stars import GiftPremiumWithStars
 from .hide_gift import HideGift
+from .increase_gift_auction_bid import IncreaseGiftAuctionBid
+from .place_gift_auction_bid import PlaceGiftAuctionBid
 from .remove_collection_gifts import RemoveCollectionGifts
 from .reorder_collection_gifts import ReorderCollectionGifts
 from .reorder_gift_collections import ReorderGiftCollections
@@ -66,6 +69,7 @@ class Payments(
     EditStarSubscription,
     GetAvailableGifts,
     GetChatGifts,
+    GetGiftAuctionState,
     GetChatGiftsCount,
     GetGiftCollections,
     GetGiftUpgradePreview,
@@ -76,6 +80,8 @@ class Payments(
     GetUpgradedGiftValueInfo,
     GiftPremiumWithStars,
     HideGift,
+    IncreaseGiftAuctionBid,
+    PlaceGiftAuctionBid,
     RemoveCollectionGifts,
     ReorderCollectionGifts,
     ReorderGiftCollections,

@@ -17,6 +17,8 @@
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
 from .animation import Animation
+from .auction_bid import AuctionBid
+from .auction_state import AuctionState, AuctionStateActive, AuctionStateFinished
 from .audio import Audio
 from .available_effect import AvailableEffect
 from .boosts_status import BoostsStatus
@@ -94,6 +96,8 @@ from .saved_credentials import SavedCredentials
 from .screenshot_taken import ScreenshotTaken
 from .star_amount import StarAmount
 from .gift_attribute import GiftAttribute
+from .gift_auction_state import GiftAuctionState
+from .gift_auction import GiftAuction
 from .gift import Gift
 from .gifted_premium import GiftedPremium
 from .gifted_stars import GiftedStars
@@ -128,6 +132,10 @@ from .write_access_allowed import WriteAccessAllowed
 
 __all__ = [
     "Animation",
+    "AuctionBid",
+    "AuctionState",
+    "AuctionStateActive",
+    "AuctionStateFinished",
     "Audio",
     "AvailableEffect",
     "BoostsStatus",
@@ -207,6 +215,8 @@ __all__ = [
     "ScreenshotTaken",
     "StarAmount",
     "GiftAttribute",
+    "GiftAuctionState",
+    "GiftAuction",
     "Gift",
     "GiftedPremium",
     "GiftedStars",

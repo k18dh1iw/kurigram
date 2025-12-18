@@ -444,6 +444,7 @@ def pyrogram_api():
             convert_gift_to_stars
             get_available_gifts
             get_chat_gifts
+            get_gift_auction_state
             get_chat_gifts_count
             add_collection_gifts
             create_gift_collection
@@ -464,6 +465,8 @@ def pyrogram_api():
             get_upgraded_gift
             gift_premium_with_stars
             hide_gift
+            increase_gift_auction_bid
+            place_gift_auction_bid
             search_gifts_for_resale
             send_gift
             send_payment_form
@@ -801,6 +804,12 @@ def pyrogram_api():
             InputChatPhotoPrevious
             InputChatPhotoStatic
             InputChatPhotoAnimation
+            AuctionBid
+            AuctionState
+            AuctionStateActive
+            AuctionStateFinished
+            GiftAuctionState
+            GiftAuction
         """,
         bot_keyboards="""
         Bot keyboards
@@ -1095,6 +1104,7 @@ def pyrogram_api():
             Gift.wear
             Gift.buy
             Gift.send
+            Gift.get_auction_state
         """,
         animation="""
         Animation
@@ -1152,6 +1162,7 @@ def pyrogram_api():
             MessageServiceType
             MessagesFilter
             NextCodeType
+            PaidReactionPrivacy
             ParseMode
             PhoneCallDiscardReason
             PollType

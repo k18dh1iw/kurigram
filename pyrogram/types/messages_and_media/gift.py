@@ -203,6 +203,9 @@ class Gift(Object):
         used_theme_chat_id (``int``, *optional*):
             Identifier of the chat for which the gift is used to set a theme.
 
+        auction_info (:obj:`~pyrogram.types.GiftAuction`, *optional*):
+            Information about the auction on which the gift can be purchased.
+
         raw (:obj:`~pyrogram.raw.base.StarGift`, *optional*):
             The raw object as received from the server.
 
@@ -271,6 +274,7 @@ class Gift(Object):
         is_upgrade_separate: Optional[bool] = None,
         is_theme_available: Optional[bool] = None,
         used_theme_chat_id: Optional[int] = None,
+        auction_info: Optional["types.GiftAuction"] = None,
         raw: Optional["raw.base.StarGift"] = None
     ):
         super().__init__(client)
@@ -331,10 +335,11 @@ class Gift(Object):
         self.is_upgrade_separate = is_upgrade_separate
         self.is_theme_available = is_theme_available
         self.used_theme_chat_id = used_theme_chat_id
+        self.auction_info = auction_info
         self.raw = raw
 
     @staticmethod
-    async def _parse(client, gift, users: Dict[int, "raw.base.User"] = {}, chats: Dict[int, "raw.base.Chat"] = {}):
+    async def _parse(client: "pyrogram.Client", gift: Union["raw.base.StarGift", "raw.base.SavedStarGift"], users: Dict[int, "raw.base.User"] = {}, chats: Dict[int, "raw.base.Chat"] = {}):
         if isinstance(gift, raw.types.StarGift):
             return await Gift._parse_regular(client, gift, users, chats)
         elif isinstance(gift, raw.types.StarGiftUnique):
@@ -344,7 +349,7 @@ class Gift(Object):
 
     @staticmethod
     async def _parse_regular(
-        client,
+        client: "pyrogram.Client",
         star_gift: "raw.types.StarGift",
         users: Dict[int, "raw.base.User"],
         chats: Dict[int, "raw.base.Chat"]
@@ -374,13 +379,14 @@ class Gift(Object):
             last_sale_date=utils.timestamp_to_datetime(star_gift.last_sale_date),
             locked_until_date=utils.timestamp_to_datetime(star_gift.locked_until_date),
             publisher_chat=types.Chat._parse_chat(client, chats.get(utils.get_raw_peer_id(star_gift.released_by))),
+            auction_info=await types.GiftAuction._parse(star_gift),
             raw=star_gift,
             client=client
         )
 
     @staticmethod
     async def _parse_unique(
-        client,
+        client: "pyrogram.Client",
         star_gift: "raw.types.StarGiftUnique",
         users: Dict[int, "raw.base.User"] = {},
         chats: Dict[int, "raw.base.Chat"] = {}
@@ -769,3 +775,24 @@ class Gift(Object):
             is_private=is_private,
             pay_for_upgrade=pay_for_upgrade
         )
+
+    async def get_auction_state(self) -> "types.GiftAuctionState":
+        """Bound method *get_auction_state* of :obj:`~pyrogram.types.Gift`.
+
+        .. note::
+
+            For regular gifts only.
+
+        Use as a shortcut for:
+
+        .. code-block:: python
+
+            await client.get_gift_auction_state(
+                auction_id=gift.id
+            )
+
+        Returns:
+            :obj:`~pyrogram.types.GiftAuctionState`: The auction state of the gift.
+        """
+
+        return await self._client.get_gift_auction_state(auction_id=self.id)
