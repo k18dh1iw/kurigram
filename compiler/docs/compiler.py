@@ -361,6 +361,7 @@ def pyrogram_api():
             get_forum_topics
             get_forum_topics_by_id
             update_color
+            set_upgraded_gift_colors
             update_chat_notifications
             toggle_forum_topics
             create_folder_invite_link
@@ -457,6 +458,7 @@ def pyrogram_api():
             reuse_star_subscription
             set_gift_collection_name
             get_gift_upgrade_preview
+            get_gift_upgrade_variants
             get_payment_form
             get_stars_balance
             get_ton_balance
@@ -476,6 +478,8 @@ def pyrogram_api():
             suggest_birthday
             transfer_gift
             upgrade_gift
+            process_gift_purchase_offer
+            send_gift_purchase_offer
         """,
         phone="""
         Phone
@@ -752,6 +756,7 @@ def pyrogram_api():
             GiftResalePriceTon
             GiftUpgradePreview
             GiftUpgradePrice
+            GiftUpgradeVariants
             CheckedGiftCode
             ChecklistTask
             ChecklistTasksAdded
@@ -796,6 +801,7 @@ def pyrogram_api():
             GiftedTon
             UpgradedGiftValueInfo
             UpgradedGiftAttributeId
+            UpgradedGiftPurchaseOffer
             UpgradedGiftAttributeIdModel
             UpgradedGiftAttributeIdSymbol
             UpgradedGiftAttributeIdBackdrop
@@ -804,6 +810,7 @@ def pyrogram_api():
             InputChatPhotoStatic
             InputChatPhotoAnimation
             AuctionBid
+            AuctionRound
             AuctionState
             AuctionStateActive
             AuctionStateFinished
@@ -1129,6 +1136,7 @@ def pyrogram_api():
             Gift.buy
             Gift.send
             Gift.get_auction_state
+            Gift.send_purchase_offer
         """,
         animation="""
         Animation
@@ -1201,6 +1209,7 @@ def pyrogram_api():
             MediaAreaType
             PrivacyRuleType
             GiftForResaleOrder
+            GiftPurchaseOfferState
             PaymentFormType
             StickerType
             MaskPointType

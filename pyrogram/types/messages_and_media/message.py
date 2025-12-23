@@ -499,6 +499,12 @@ class Message(Object, Update):
         screenshot_taken (:obj:`~pyrogram.types.ScreenshotTaken`, *optional*):
             Service message: screenshot of a message in the chat has been taken.
 
+        upgraded_gift_purchase_offer (:obj:`~pyrogram.types.UpgradedGiftPurchaseOffer`, *optional*):
+            Service message: An offer to purchase an upgraded gift was sent or received.
+
+        upgraded_gift_purchase_offer_declined (:obj:`~pyrogram.types.UpgradedGiftPurchaseOfferDeclined`, *optional*):
+            Service message: An offer to purchase a gift was declined or expired.
+
         business_connection_id (``str``, *optional*):
             Unique identifier of the business connection from which the message was received.
             If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
@@ -688,6 +694,8 @@ class Message(Object, Update):
         proximity_alert_triggered: Optional["types.ProximityAlertTriggered"] = None,
         giveaway_prize_stars: Optional["types.GiveawayPrizeStars"] = None,
         screenshot_taken: Optional["types.ScreenshotTaken"] = None,
+        upgraded_gift_purchase_offer: Optional["types.UpgradedGiftPurchaseOffer"] = None,
+        upgraded_gift_purchase_offer_declined: Optional["types.UpgradedGiftPurchaseOfferDeclined"] = None,
         business_connection_id: Optional[str] = None,
         reply_markup: Optional[
             Union[
@@ -799,6 +807,8 @@ class Message(Object, Update):
         self.command = command
         self.giveaway_prize_stars = giveaway_prize_stars
         self.screenshot_taken = screenshot_taken
+        self.upgraded_gift_purchase_offer = upgraded_gift_purchase_offer
+        self.upgraded_gift_purchase_offer_declined = upgraded_gift_purchase_offer_declined
         self.business_connection_id = business_connection_id
         self.reply_markup = reply_markup
         self.forum_topic_created = forum_topic_created
@@ -935,6 +945,8 @@ class Message(Object, Update):
         users_shared = None
         chat_shared = None
         screenshot_taken = None
+        upgraded_gift_purchase_offer = None
+        upgraded_gift_purchase_offer_declined = None
         # passport_data_send = None
         # passport_data_received = None
         chat_set_theme = None
@@ -1129,6 +1141,23 @@ class Message(Object, Update):
         elif isinstance(action, raw.types.MessageActionScreenshotTaken):
             service_type = enums.MessageServiceType.SCREENSHOT_TAKEN
             screenshot_taken = types.ScreenshotTaken()
+        elif isinstance(action, raw.types.MessageActionStarGiftPurchaseOffer):
+            service_type = enums.MessageServiceType.UPGRADED_GIFT_PURCHASE_OFFER
+            upgraded_gift_purchase_offer = await types.UpgradedGiftPurchaseOffer._parse(
+                client,
+                action,
+                users,
+                chats
+            )
+        elif isinstance(action, raw.types.MessageActionStarGiftPurchaseOfferDeclined):
+            service_type = enums.MessageServiceType.UPGRADED_GIFT_PURCHASE_OFFER_DECLINED
+            upgraded_gift_purchase_offer_declined = await types.UpgradedGiftPurchaseOfferDeclined._parse(
+                client,
+                action,
+                getattr(message.reply_to, "reply_to_msg_id", None),
+                users,
+                chats
+            )
         # TODO: elif isinstance(action, raw.types.MessageActionSecureValuesSent):
             # service_type = enums.MessageServiceType.PASSPORT_DATA_SEND
             # passport_data_send = ...
@@ -1243,6 +1272,8 @@ class Message(Object, Update):
             users_shared=users_shared,
             chat_shared=chat_shared,
             screenshot_taken=screenshot_taken,
+            upgraded_gift_purchase_offer=upgraded_gift_purchase_offer,
+            upgraded_gift_purchase_offer_declined=upgraded_gift_purchase_offer_declined,
             chat_set_theme=chat_set_theme,
             chat_set_background=chat_set_background,
             set_message_auto_delete_time=set_message_auto_delete_time,

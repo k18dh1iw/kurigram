@@ -16,9 +16,10 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
 from typing import Optional
 
-from pyrogram import raw
+from pyrogram import raw, utils
 
 from ..object import Object
 
@@ -32,13 +33,17 @@ class GiftAuction(Object):
 
         gifts_per_round (``int``):
             Number of gifts distributed in each round.
+
+        start_date (:py:obj:`~datetime.datetime`):
+            Date when the auction will start.
     """
 
-    def __init__(self, *, id: str, gifts_per_round: int):
+    def __init__(self, *, id: str, gifts_per_round: int, start_date: datetime):
         super().__init__()
 
         self.id = id
         self.gifts_per_round = gifts_per_round
+        self.start_date = start_date
 
     @staticmethod
     def _parse(gift: "raw.types.StarGift") -> Optional["GiftAuction"]:
@@ -46,4 +51,5 @@ class GiftAuction(Object):
             return GiftAuction(
                 id=gift.auction_slug,
                 gifts_per_round=gift.gifts_per_round,
+                start_date=utils.timestamp_to_datetime(gift.auction_start_date),
             )
