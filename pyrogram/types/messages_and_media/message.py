@@ -2046,16 +2046,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -2425,16 +2428,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -2732,16 +2738,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -3024,16 +3033,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -3313,16 +3325,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -3916,16 +3931,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -4111,16 +4129,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -4332,16 +4353,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -4658,16 +4682,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -5040,16 +5067,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -5611,16 +5641,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -5906,16 +5939,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -6248,16 +6284,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -6664,16 +6703,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -7010,16 +7052,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -7492,16 +7537,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -7731,16 +7779,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
@@ -7906,16 +7957,19 @@ class Message(Object, Update):
         Raises:
             RPCError: In case of a Telegram RPC error.
         """
+        if reply_parameters is None:
+            reply_parameters = types.ReplyParameters(
+                message_id=self.id
+            )
+
         if quote is not None:
             log.warning(
                 "`quote` parameter is deprecated and will be removed in future updates."
             )
             quote = self.chat.type != enums.ChatType.PRIVATE
 
-        if reply_parameters is None:
-            reply_parameters = types.ReplyParameters(
-                message_id=quote if quote is not None else self.id
-            )
+            if not quote:
+                reply_parameters = None
 
         if message_thread_id is None:
             message_thread_id = self.message_thread_id
