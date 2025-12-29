@@ -3857,6 +3857,10 @@ class Message(Object, Update):
         self,
         latitude: float,
         longitude: float,
+        horizontal_accuracy: Optional[float] = None,
+        live_period: Optional[int] = None,
+        heading: Optional[int] = None,
+        proximity_alert_radius: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         message_thread_id: Optional[int] = None,
         direct_messages_topic_id: Optional[int] = None,
@@ -3892,6 +3896,22 @@ class Message(Object, Update):
 
             longitude (``float``):
                 Longitude of the location.
+
+            horizontal_accuracy (``float``, *optional*):
+                The radius of uncertainty for the location, measured in meters, 0-1500.
+
+            live_period (``int``, *optional*):
+                For live locations, a period for which the location can be updated, in seconds.
+                Must be between 60 and 86400 for a temporary live location, 0x7FFFFFFF for permanent live location.
+
+            heading (``int``, *optional*):
+                For live locations, a direction in which the user is moving, in degrees.
+                Must be between 1 and 360 if specified.
+
+            proximity_alert_radius (``int``, *optional*):
+                For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters.
+                Must be between 1 and 100000 if specified.
+                Can't be enabled in channels and Saved Messages.
 
             disable_notification (``bool``, *optional*):
                 Sends the message silently.
@@ -3955,6 +3975,10 @@ class Message(Object, Update):
             chat_id=self.chat.id,
             latitude=latitude,
             longitude=longitude,
+            horizontal_accuracy=horizontal_accuracy,
+            live_period=live_period,
+            heading=heading,
+            proximity_alert_radius=proximity_alert_radius,
             disable_notification=disable_notification,
             message_thread_id=message_thread_id,
             direct_messages_topic_id=direct_messages_topic_id,
@@ -3974,6 +3998,10 @@ class Message(Object, Update):
         self,
         latitude: float,
         longitude: float,
+        horizontal_accuracy: Optional[float] = None,
+        live_period: Optional[int] = None,
+        heading: Optional[int] = None,
+        proximity_alert_radius: Optional[int] = None,
         disable_notification: Optional[bool] = None,
         message_thread_id: Optional[int] = None,
         direct_messages_topic_id: Optional[int] = None,
@@ -4003,6 +4031,22 @@ class Message(Object, Update):
 
             longitude (``float``):
                 Longitude of the location.
+
+            horizontal_accuracy (``float``, *optional*):
+                The radius of uncertainty for the location, measured in meters, 0-1500.
+
+            live_period (``int``, *optional*):
+                For live locations, a period for which the location can be updated, in seconds.
+                Must be between 60 and 86400 for a temporary live location, 0x7FFFFFFF for permanent live location.
+
+            heading (``int``, *optional*):
+                For live locations, a direction in which the user is moving, in degrees.
+                Must be between 1 and 360 if specified.
+
+            proximity_alert_radius (``int``, *optional*):
+                For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters.
+                Must be between 1 and 100000 if specified.
+                Can't be enabled in channels and Saved Messages.
 
             disable_notification (``bool``, *optional*):
                 Sends the message silently.
@@ -4052,6 +4096,10 @@ class Message(Object, Update):
             chat_id=self.chat.id,
             latitude=latitude,
             longitude=longitude,
+            horizontal_accuracy=horizontal_accuracy,
+            live_period=live_period,
+            heading=heading,
+            proximity_alert_radius=proximity_alert_radius,
             disable_notification=disable_notification,
             message_thread_id=message_thread_id,
             direct_messages_topic_id=direct_messages_topic_id,
@@ -8280,6 +8328,86 @@ class Message(Object, Update):
             message_id=self.id,
             reply_markup=reply_markup
         )
+
+    async def edit_live_location(
+        self,
+        latitude: float,
+        longitude: float,
+        horizontal_accuracy: Optional[float] = None,
+        live_period: Optional[int] = None,
+        heading: Optional[int] = None,
+        proximity_alert_radius: Optional[int] = None
+    ) -> "Message":
+        """Use this method to edit live location messages.
+
+        Parameters:
+            latitude (``float``):
+                Latitude of the location.
+
+            longitude (``float``):
+                Longitude of the location.
+
+            horizontal_accuracy (``float``, *optional*):
+                The radius of uncertainty for the location, measured in meters, 0-1500.
+
+            live_period (``int``, *optional*):
+                New period in seconds during which the location can be updated, starting from the message send date.
+                If 0x7FFFFFFF is specified, then the location can be updated forever.
+                Otherwise, the new value must not exceed the current ``live_period`` by more than a day,
+                and the live location expiration date must remain within the next 90 days.
+                If not specified, then ``live_period`` remains unchanged.
+
+            heading (``int``, *optional*):
+                For live locations, a direction in which the user is moving, in degrees.
+                Must be between 1 and 360 if specified.
+
+            proximity_alert_radius (``int``, *optional*):
+                For live locations, a maximum distance for proximity alerts about approaching another chat member, in meters.
+                Must be between 1 and 100000 if specified.
+                Can't be enabled in channels and Saved Messages.
+
+        Returns:
+            On success, the edited :obj:`~pyrogram.types.Message` is returned.
+        """
+        r = await self._client.invoke(
+            raw.functions.messages.EditMessage(
+                peer=await self._client.resolve_peer(self.chat.id),
+                id=self.id,
+                media=raw.types.InputMediaGeoLive(
+                    geo_point=raw.types.InputGeoPoint(
+                        lat=latitude,
+                        long=longitude,
+                        accuracy_radius=horizontal_accuracy
+                    ),
+                    heading=heading,
+                    period=live_period,
+                    proximity_notification_radius=proximity_alert_radius
+                )
+            )
+        )
+
+        return next(iter(await utils.parse_messages(client=self._client, messages=r)), None)
+
+    async def stop_live_location(
+        self
+    ) -> "Message":
+        """Use this method to stop updating a live location message before live_period expires.
+
+        Returns:
+            On success, the edited :obj:`~pyrogram.types.Message` is returned.
+        """
+        r = await self._client.invoke(
+            raw.functions.messages.EditMessage(
+                peer=await self._client.resolve_peer(self.chat.id),
+                id=self.id,
+                media=raw.types.InputMediaGeoLive(
+                    geo_point=raw.types.InputGeoPointEmpty(),
+                    stopped=True
+                )
+            )
+        )
+
+        return next(iter(await utils.parse_messages(client=self._client, messages=r)), None)
 
     async def forward(
         self,

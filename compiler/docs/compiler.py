@@ -1014,6 +1014,8 @@ def pyrogram_api():
             Message.edit_media
             Message.edit_checklist
             Message.edit_reply_markup
+            Message.edit_live_location
+            Message.stop_live_location
             Message.forward
             Message.copy
             Message.copy_media_group
