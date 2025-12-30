@@ -1176,7 +1176,7 @@ class Message(Object, Update):
         elif isinstance(action, (raw.types.MessageActionStarGift, raw.types.MessageActionStarGiftUnique)):
             service_type = enums.MessageServiceType.GIFT
             is_prepaid_upgrade=action.prepaid_upgrade
-            is_from_auction=action.auction_acquired
+            is_from_auction=getattr(action, "auction_acquired", None)
             gift = await types.Gift._parse_action(client, message, users, chats)
         elif isinstance(action, raw.types.MessageActionSuggestProfilePhoto):
             service_type = enums.MessageServiceType.SUGGEST_PROFILE_PHOTO
