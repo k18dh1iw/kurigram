@@ -428,8 +428,8 @@ class Gift(Object):
                 [await types.GiftAttribute._parse(client, attr, users, chats) for attr in star_gift.attributes]
             ) or None,
             number=star_gift.availability_issued,
-            total_upgraded_count=star_gift.availability_total,
-            max_upgraded_count=star_gift.availability_issued,
+            total_upgraded_count=star_gift.availability_issued,
+            max_upgraded_count=star_gift.availability_total,
             is_premium=star_gift.require_premium,
             is_theme_available=star_gift.theme_available,
             used_theme_chat_id=utils.get_peer_id(star_gift.theme_peer) if star_gift.theme_peer else None,
