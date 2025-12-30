@@ -9309,3 +9309,29 @@ class Message(Object, Update):
             payment_form_id=form.id,
             input_invoice=invoice
         )
+
+    async def approve_gift_purchase_offer(self) -> "types.Message":
+        """Shortcut for method :obj:`~pyrogram.Client.process_gift_purchase_offer` will automatically fill method attributes:
+
+        * message_id
+
+        Returns:
+            :obj:`~pyrogram.types.Message`: On success, the sent message is returned.
+        """
+        return await self._client.process_gift_purchase_offer(
+            message_id=self.id,
+            approve=True
+        )
+
+    async def reject_gift_purchase_offer(self) -> "types.Message":
+        """Shortcut for method :obj:`~pyrogram.Client.process_gift_purchase_offer` will automatically fill method attributes:
+
+        * message_id
+
+        Returns:
+            :obj:`~pyrogram.types.Message`: On success, the sent message is returned.
+        """
+        return await self._client.process_gift_purchase_offer(
+            message_id=self.id,
+            approve=False
+        )

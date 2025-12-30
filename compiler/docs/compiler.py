@@ -1030,6 +1030,8 @@ def pyrogram_api():
             Message.read
             Message.view
             Message.pay
+            Message.approve_gift_purchase_offer
+            Message.reject_gift_purchase_offer
         """,
         chat="""
         Chat
