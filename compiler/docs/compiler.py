@@ -306,6 +306,7 @@ def pyrogram_api():
             approve_suggested_post
             decline_suggested_post
             add_checklist_tasks
+            summarize_message
         """,
         chats="""
         Chats
@@ -1033,6 +1034,7 @@ def pyrogram_api():
             Message.pay
             Message.accept_gift_purchase_offer
             Message.reject_gift_purchase_offer
+            Message.summarize
         """,
         chat="""
         Chat

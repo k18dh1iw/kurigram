@@ -556,6 +556,10 @@ class Message(Object, Update):
 
         repeat_period (``int``, *optional*):
             Period after which the message will be sent again in seconds.
+
+        summary_language_code (``str``, *optional*):
+            IETF language tag of the message language on which it can be summarized.
+            None if summary isn't available for the message.
     """
     def __init__(
         self,
@@ -716,6 +720,7 @@ class Message(Object, Update):
         suggested_post_info: Optional["types.SuggestedPostInfo"] = None,
         channel_post: Optional[bool] = None,
         repeat_period: Optional[int] = None,
+        summary_language_code: Optional[str] = None,
         raw: Optional["raw.types.Message"] = None
     ):
         super().__init__(client)
@@ -868,6 +873,7 @@ class Message(Object, Update):
         self.suggested_post_info = suggested_post_info
         self.channel_post = channel_post
         self.repeat_period = repeat_period
+        self.summary_language_code = summary_language_code
         self.raw = raw
 
     @staticmethod
@@ -1627,6 +1633,7 @@ class Message(Object, Update):
             suggested_post_info=types.SuggestedPostInfo._parse(message.suggested_post),
             channel_post=message.post,
             repeat_period=message.schedule_repeat_period,
+            summary_language_code=message.summary_from_language,
             raw=message,
             client=client
         )
@@ -9334,4 +9341,33 @@ class Message(Object, Update):
         return await self._client.process_gift_purchase_offer(
             message_id=self.id,
             accept=False
+        )
+
+    async def summarize(self, translate_to_language_code: str) -> "types.FormattedText":
+        """Shortcut for method :obj:`~pyrogram.Client.summarize_message` will automatically fill method attributes:
+
+        * chat_id
+        * message_id
+
+        Parameters:
+            translate_to_language_code (``str``):
+                Language code of the language to which the message is translated.
+                Must be one of "af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca", "ceb", "zh-CN", "zh", "zh-Hans", "zh-TW", "zh-Hant", "co", "hr", "cs", "da", "nl", "en", "eo", "et",
+                "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "iw", "hi", "hmn", "hu", "is", "ig", "id", "in", "ga", "it", "ja", "jv", "kn", "kk", "km", "rw", "ko",
+                "ku", "ky", "lo", "la", "lv", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ny", "or", "ps", "fa", "pl", "pt", "pa", "ro", "ru", "sm", "gd", "sr",
+                "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tl", "tg", "ta", "tt", "te", "th", "tr", "tk", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "ji", "yo", "zu"
+
+        Returns:
+            :obj:`~pyrogram.types.FormattedText`: On success, the sent message is returned.
+
+        Raises:
+            ValueError: In case of this message can't be summarized.
+        """
+        if not self.summary_language_code:
+            raise ValueError("This message can't be summarized.")
+
+        return await self._client.summarize_message(
+            chat_id=self.chat.id,
+            message_id=self.id,
+            translate_to_language_code=translate_to_language_code
         )
