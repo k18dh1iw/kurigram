@@ -233,7 +233,7 @@ class Gift(Object):
         can_be_transferred (``bool``, *optional*):
             True, if the upgraded gift can be transferred to another owner.
 
-        can_send_gift_purchase_offer (``bool``, *optional*):
+        can_send_purchase_offer (``bool``, *optional*):
             True, if an offer to purchase the gift can be sent using :meth:`~pyrogram.Client.send_gift_purchase_offer`.
 
         was_converted (``bool``, *optional*):
@@ -328,7 +328,7 @@ class Gift(Object):
         is_name_hidden: Optional[bool] = None,
         can_be_upgraded: Optional[bool] = None,
         can_be_transferred: Optional[bool] = None,
-        can_send_gift_purchase_offer: Optional[bool] = None,
+        can_send_purchase_offer: Optional[bool] = None,
         was_converted: Optional[bool] = None,
         was_upgraded: Optional[bool] = None,
         was_refunded: Optional[bool] = None,
@@ -408,7 +408,7 @@ class Gift(Object):
         self.is_name_hidden = is_name_hidden
         self.can_be_upgraded = can_be_upgraded
         self.can_be_transferred = can_be_transferred
-        self.can_send_gift_purchase_offer = can_send_gift_purchase_offer
+        self.can_send_purchase_offer = can_send_purchase_offer
         self.was_converted = was_converted
         self.was_upgraded = was_upgraded
         self.was_refunded = was_refunded
@@ -518,7 +518,7 @@ class Gift(Object):
         return Gift(
             id=star_gift.id,
             type=enums.GiftType.UPGRADED,
-            can_send_gift_purchase_offer=star_gift.offer_min_stars is not None,
+            can_send_purchase_offer=star_gift.offer_min_stars is not None,
             gift_address=star_gift.gift_address,
             host=types.Chat._parse_chat(client, users.get(raw_host_id) or chats.get(raw_host_id)),
             is_premium=star_gift.require_premium,
