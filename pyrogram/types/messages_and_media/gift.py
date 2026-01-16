@@ -169,6 +169,13 @@ class Gift(Object):
         value_usd_amount (``int``, *optional*):
             Estimated value of the gift in USD cents.
 
+        last_resale_currency (``str``, *optional*):
+            For gifts bought from other users, the currency in which the payment for the gift was done.
+            Currently, one of “XTR” for Telegram Stars or “TON” for toncoins.
+
+        last_resale_amount (``int``, *optional*):
+            For gifts bought from other users, the price paid for the gift in either Telegram Stars or nanotoncoins.
+
         next_send_date (:py:obj:`~datetime.datetime`, *optional*):
             Date when the gift can be sent next time by the current user.
 
@@ -307,6 +314,8 @@ class Gift(Object):
         value_currency: Optional[str] = None,
         value_amount: Optional[int] = None,
         value_usd_amount: Optional[int] = None,
+        last_resale_currency: Optional[str] = None,
+        last_resale_amount: Optional[int] = None,
         next_send_date: Optional[datetime] = None,
         next_transfer_date: Optional[datetime] = None,
         next_resale_date: Optional[datetime] = None,
@@ -387,6 +396,8 @@ class Gift(Object):
         self.value_currency = value_currency
         self.value_amount = value_amount
         self.value_usd_amount = value_usd_amount
+        self.last_resale_currency = last_resale_currency
+        self.last_resale_amount = last_resale_amount
         self.next_send_date = next_send_date
         self.next_transfer_date = next_transfer_date
         self.next_resale_date = next_resale_date
@@ -643,7 +654,6 @@ class Gift(Object):
             # assigned
             # from_offer
             # peer
-            # resale_amount
 
             raw_sender_id = utils.get_raw_peer_id(action_gift.from_id)
             raw_receiver_id = utils.get_raw_peer_id(action_gift.peer)
@@ -652,6 +662,13 @@ class Gift(Object):
 
             if action_gift.saved_id:
                 parsed_gift.received_gift_id = str(action_gift.saved_id)
+
+            if isinstance(action_gift.resale_amount, raw.types.StarsAmount):
+                parsed_gift.last_resale_currency = "XTR"
+                parsed_gift.last_resale_amount = action_gift.resale_amount.amount
+            elif isinstance(action_gift.resale_amount, raw.types.StarsTonAmount):
+                parsed_gift.last_resale_currency = "TON"
+                parsed_gift.last_resale_amount = action_gift.resale_amount.amount
 
             parsed_gift.was_upgraded = action_gift.upgrade or parsed_gift.was_upgraded
             parsed_gift.is_saved = action_gift.saved or parsed_gift.is_saved
