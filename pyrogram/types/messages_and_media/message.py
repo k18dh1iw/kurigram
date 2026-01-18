@@ -405,8 +405,8 @@ class Message(Object, Update):
         checklist_tasks_added (:obj:`~pyrogram.types.ChecklistTasksAdded`, *optional*):
             Service message: checklist tasks added.
 
-        gift_code (:obj:`~pyrogram.types.GiftCode`, *optional*):
-            Service message: gift code information.
+        premium_gift_code (:obj:`~pyrogram.types.PremiumGiftCode`, *optional*):
+            Service message: premium gift code information.
 
         gifted_premium (:obj:`~pyrogram.types.GiftedPremium`, *optional*):
             Service message: gifted premium information.
@@ -669,7 +669,7 @@ class Message(Object, Update):
         direct_message_price_changed: Optional["types.DirectMessagePriceChanged"] = None,
         checklist_tasks_done: Optional[List["types.ChecklistTasksDone"]] = None,
         checklist_tasks_added: Optional[List["types.ChecklistTasksAdded"]] = None,
-        gift_code: Optional["types.PremiumGiftCode"] = None,
+        premium_gift_code: Optional["types.PremiumGiftCode"] = None,
         gifted_premium: Optional["types.GiftedPremium"] = None,
         gifted_stars: Optional["types.GiftedStars"] = None,
         gifted_ton: Optional["types.GiftedTon"] = None,
@@ -835,7 +835,7 @@ class Message(Object, Update):
         self.direct_message_price_changed = direct_message_price_changed
         self.checklist_tasks_done = checklist_tasks_done
         self.checklist_tasks_added = checklist_tasks_added
-        self.gift_code = gift_code
+        self.premium_gift_code = premium_gift_code
         self.gifted_premium = gifted_premium
         self.gifted_stars = gifted_stars
         self.gifted_ton = gifted_ton
@@ -927,7 +927,7 @@ class Message(Object, Update):
         contact_registered = None
         text = None
         proximity_alert_triggered = None
-        gift_code = None
+        premium_gift_code = None
         gifted_premium = None
         gifted_stars = None
         gifted_ton = None
@@ -1041,8 +1041,8 @@ class Message(Object, Update):
             service_type = enums.MessageServiceType.PROXIMITY_ALERT_TRIGGERED
             proximity_alert_triggered = types.ProximityAlertTriggered._parse(client, action, users, chats)
         elif isinstance(action, raw.types.MessageActionGiftCode):
-            service_type = enums.MessageServiceType.GIFT_CODE
-            gift_code = await types.PremiumGiftCode._parse(client, action, users, chats)
+            service_type = enums.MessageServiceType.PREMIUM_GIFT_CODE
+            premium_gift_code = await types.PremiumGiftCode._parse(client, action, users, chats)
         elif isinstance(action, raw.types.MessageActionGiftPremium):
             service_type = enums.MessageServiceType.GIFTED_PREMIUM
             gifted_premium = await types.GiftedPremium._parse(
@@ -1253,7 +1253,7 @@ class Message(Object, Update):
             contact_registered=contact_registered,
             text=text,
             proximity_alert_triggered=proximity_alert_triggered,
-            gift_code=gift_code,
+            premium_gift_code=premium_gift_code,
             gifted_premium=gifted_premium,
             gifted_stars=gifted_stars,
             gifted_ton=gifted_ton,
