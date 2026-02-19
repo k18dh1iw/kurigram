@@ -8955,9 +8955,9 @@ class Message(Object, Update):
 
         Returns:
             -   The result of :meth:`~pyrogram.Client.request_callback_answer` in case of inline callback button clicks.
-            -   The result of :meth:`~Message.reply()` in case of normal button clicks.
-            -   A string in case the inline button is a URL, a *switch_inline_query* or a
-                *switch_inline_query_current_chat* button.
+            -   The result of :meth:`~Message.reply()` or :meth:`~Message.answer()` in case of normal button clicks.
+            -   A string in case the inline button is a URL, a *switch_inline_query*,
+                *switch_inline_query_current_chat* or a *copy_text* button.
             -   A string URL with the user details, in case of a WebApp button.
             -   A :obj:`~pyrogram.types.Chat` object in case of a ``KeyboardButtonUserProfile`` button.
 
@@ -9061,6 +9061,8 @@ class Message(Object, Update):
                 return button.switch_inline_query
             elif button.switch_inline_query_current_chat:
                 return button.switch_inline_query_current_chat
+            elif button.copy_text:
+                return button.copy_text
             else:
                 raise ValueError("This button is not supported yet")
         else:
