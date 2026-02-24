@@ -47,13 +47,12 @@ class RawUpdateHandler(Handler):
             :obj:`~pyrogram.raw.base.Update` base type.
 
         users (``dict``):
-            Dictionary of all :obj:`~pyrogram.types.User` mentioned in the update.
+            Dictionary of all :obj:`~pyrogram.raw.base.User` mentioned in the update.
             You can access extra info about the user (such as *first_name*, *last_name*, etc...) by using
             the IDs you find in the *update* argument (e.g.: *users[1768841572]*).
 
         chats (``dict``):
-            Dictionary of all :obj:`~pyrogram.types.Chat` and
-            :obj:`~pyrogram.raw.types.Channel` mentioned in the update.
+            Dictionary of all :obj:`~pyrogram.raw.base.Chat` mentioned in the update.
             You can access extra info about the chat (such as *title*, *participants_count*, etc...)
             by using the IDs you find in the *update* argument (e.g.: *chats[1701277281]*).
 
