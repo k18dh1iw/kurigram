@@ -384,6 +384,7 @@ def pyrogram_api():
             transfer_chat_ownership
             get_suitable_discussion_chats
             set_chat_discussion_group
+            set_chat_member_tag
             set_main_profile_tab
         """,
         users="""
