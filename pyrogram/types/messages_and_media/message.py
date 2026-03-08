@@ -511,6 +511,9 @@ class Message(Object, Update):
         upgraded_gift_purchase_offer_rejected (:obj:`~pyrogram.types.UpgradedGiftPurchaseOfferRejected`, *optional*):
             Service message: An offer to purchase a gift was rejected or expired.
 
+        chat_has_protected_content_disable_requested  (:obj:`~pyrogram.types.ChatProtectedContentDisableRequested`, *optional*):
+            Service message: An process requested to disable ``has_protected_content`` in a chat.
+
         business_connection_id (``str``, *optional*):
             Unique identifier of the business connection from which the message was received.
             If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
@@ -708,6 +711,7 @@ class Message(Object, Update):
         screenshot_taken: Optional["types.ScreenshotTaken"] = None,
         upgraded_gift_purchase_offer: Optional["types.UpgradedGiftPurchaseOffer"] = None,
         upgraded_gift_purchase_offer_rejected: Optional["types.UpgradedGiftPurchaseOfferRejected"] = None,
+        chat_has_protected_content_disable_requested: Optional["types.ChatHasProtectedContentDisableRequested"] = None,
         business_connection_id: Optional[str] = None,
         reply_markup: Optional[
             Union[
@@ -824,6 +828,7 @@ class Message(Object, Update):
         self.screenshot_taken = screenshot_taken
         self.upgraded_gift_purchase_offer = upgraded_gift_purchase_offer
         self.upgraded_gift_purchase_offer_rejected = upgraded_gift_purchase_offer_rejected
+        self.chat_has_protected_content_disable_requested = chat_has_protected_content_disable_requested
         self.business_connection_id = business_connection_id
         self.reply_markup = reply_markup
         self.forum_topic_created = forum_topic_created
@@ -965,6 +970,7 @@ class Message(Object, Update):
         screenshot_taken = None
         upgraded_gift_purchase_offer = None
         upgraded_gift_purchase_offer_rejected = None
+        chat_has_protected_content_disable_requested = None
         # passport_data_send = None
         # passport_data_received = None
         chat_set_theme = None
@@ -1182,6 +1188,9 @@ class Message(Object, Update):
                 users,
                 chats
             )
+        elif isinstance(action, raw.types.MessageActionNoForwardsRequest):
+            service_type = enums.MessageServiceType.CHAT_HAS_PROTECTED_CONTENT_DISABLE_REQUESTED
+            chat_has_protected_content_disable_requested = types.ChatHasProtectedContentDisableRequested._parse(action)
         # TODO: elif isinstance(action, raw.types.MessageActionSecureValuesSent):
             # service_type = enums.MessageServiceType.PASSPORT_DATA_SEND
             # passport_data_send = ...
@@ -1300,6 +1309,7 @@ class Message(Object, Update):
             screenshot_taken=screenshot_taken,
             upgraded_gift_purchase_offer=upgraded_gift_purchase_offer,
             upgraded_gift_purchase_offer_rejected=upgraded_gift_purchase_offer_rejected,
+            chat_has_protected_content_disable_requested=chat_has_protected_content_disable_requested,
             chat_set_theme=chat_set_theme,
             chat_set_background=chat_set_background,
             set_message_auto_delete_time=set_message_auto_delete_time,

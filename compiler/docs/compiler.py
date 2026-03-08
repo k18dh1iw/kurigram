@@ -327,6 +327,7 @@ def pyrogram_api():
             pin_chat_message
             unpin_chat_message
             pin_forum_topic
+            process_chat_has_protected_content_disable_request
             unpin_forum_topic
             unpin_all_chat_messages
             get_chat
@@ -799,6 +800,7 @@ def pyrogram_api():
             ChatBoost
             ChatOwnerChanged
             ChatOwnerLeft
+            ChatHasProtectedContentDisableRequested
             ContactRegistered
             ScreenshotTaken
             StarAmount
