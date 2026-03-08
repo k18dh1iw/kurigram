@@ -174,9 +174,6 @@ class MessageEntity(Object):
         if entity is raw.types.MessageEntityMentionName:
             entity = raw.types.InputMessageEntityMentionName
         elif entity is raw.types.MessageEntityFormattedDate:
-            if not re.fullmatch(r"r|w?[dD]?[tT]?", date_time_format):
-                raise ValueError(f"Invalid date-time format string: '{date_time_format}'")
-
             args["date"] = unix_time
             args["relative"] = False
             args["short_time"] = False
@@ -186,6 +183,9 @@ class MessageEntity(Object):
             args["day_of_week"] = False
 
             if date_time_format:
+                if not re.fullmatch(r"r|w?[dD]?[tT]?", date_time_format):
+                    raise ValueError(f"Invalid date-time format string: '{date_time_format}'")
+
                 if date_time_format == "r":
                     args["relative"] = True
                 else:
