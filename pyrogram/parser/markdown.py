@@ -199,11 +199,11 @@ class Markdown:
                         markup = FORMATTED_DATE_TIME_MARKUP.format(unix_time, date_time_format, emoji_date)
                     else:
                         markup = DATE_TIME_MARKUP.format(unix_time, emoji_date)
+                    text = utils.replace_once(text, full, markup, start)
                 elif parsed.netloc == "emoji":
                     emoji_id = params.get("id", [""])[0]
                     markup = EMOJI_MARKUP.format(emoji_id, emoji_date)
-
-                text = utils.replace_once(text, full, markup, start)
+                    text = utils.replace_once(text, full, markup, start)
 
                 continue
 
