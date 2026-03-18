@@ -244,7 +244,7 @@ class InlineKeyboardButton(Object):
             bg_primary=self.style == enums.ButtonStyle.PRIMARY,
             bg_danger=self.style == enums.ButtonStyle.DANGER,
             bg_success=self.style == enums.ButtonStyle.SUCCESS,
-            icon=int(self.icon_custom_emoji_id)
+            icon=int(self.icon_custom_emoji_id) if self.icon_custom_emoji_id is not None else None
         ) if self.style != enums.ButtonStyle.DEFAULT or self.icon_custom_emoji_id is not None else None
 
         if self.callback_data is not None:
