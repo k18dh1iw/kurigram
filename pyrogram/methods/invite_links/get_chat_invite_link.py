@@ -19,8 +19,7 @@
 from typing import Union
 
 import pyrogram
-from pyrogram import raw
-from pyrogram import types
+from pyrogram import raw, types
 
 
 class GetChatInviteLink:
@@ -31,7 +30,7 @@ class GetChatInviteLink:
     ) -> "types.ChatInviteLink":
         """Get detailed information about a chat invite link.
 
-        .. include:: /_includes/usable-by/users.rst
+        .. include:: /_includes/usable-by/users-bots.rst
 
         Parameters:
             chat_id (``int`` | ``str``):
@@ -46,8 +45,7 @@ class GetChatInviteLink:
         """
         r = await self.invoke(
             raw.functions.messages.GetExportedChatInvite(
-                peer=await self.resolve_peer(chat_id),
-                link=invite_link
+                peer=await self.resolve_peer(chat_id), link=invite_link
             )
         )
 
