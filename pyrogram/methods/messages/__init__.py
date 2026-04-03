@@ -36,6 +36,7 @@ from .edit_message_checklist import EditMessageChecklist
 from .edit_message_media import EditMessageMedia
 from .edit_message_reply_markup import EditMessageReplyMarkup
 from .edit_message_text import EditMessageText
+from .fix_text_with_ai import FixTextWithAI
 from .forward_media_group import ForwardMediaGroup
 from .forward_messages import ForwardMessages
 from .get_available_effects import GetAvailableEffects
@@ -112,6 +113,7 @@ class Messages(
     EditMessageReplyMarkup,
     EditMessageMedia,
     EditMessageText,
+    FixTextWithAI,
     ForwardMediaGroup,
     ForwardMessages,
     GetAvailableEffects,

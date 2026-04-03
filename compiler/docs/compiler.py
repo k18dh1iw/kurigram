@@ -250,6 +250,7 @@ def pyrogram_api():
             send_cached_media
             send_reaction
             edit_message_text
+            fix_text_with_ai
             edit_message_caption
             edit_message_checklist
             edit_message_media
