@@ -305,6 +305,7 @@ def pyrogram_api():
             send_paid_reaction
             add_to_gifs
             approve_suggested_post
+            compose_text_with_ai
             decline_suggested_post
             add_checklist_tasks
             summarize_message

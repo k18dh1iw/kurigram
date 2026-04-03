@@ -19,6 +19,7 @@
 from .add_checklist_tasks import AddChecklistTasks
 from .add_to_gifs import AddToGifs
 from .approve_suggested_post import ApproveSuggestedPost
+from .compose_text_with_ai import ComposeTextWithAI
 from .copy_media_group import CopyMediaGroup
 from .copy_message import CopyMessage
 from .decline_suggested_post import DeclineSuggestedPost
@@ -103,6 +104,7 @@ class Messages(
     AddChecklistTasks,
     AddToGifs,
     ApproveSuggestedPost,
+    ComposeTextWithAI,
     DeclineSuggestedPost,
     DeleteMessages,
     EditMessageCaption,
