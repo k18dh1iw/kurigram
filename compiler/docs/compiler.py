@@ -520,6 +520,8 @@ def pyrogram_api():
             set_chat_menu_button
             get_chat_menu_button
             answer_web_app_query
+            check_bot_username
+            create_bot
             answer_pre_checkout_query
             answer_shipping_query
             create_invoice_link
@@ -530,6 +532,7 @@ def pyrogram_api():
             get_bot_info_short_description
             set_bot_name
             get_bot_name
+            get_bot_token
             get_owned_bots
         """,
         business="""
