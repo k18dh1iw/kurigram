@@ -190,16 +190,19 @@ class User(Object, Update):
             True, if the bot can be added to attachment or side menu.
 
         can_join_groups (``bool``, *optional*):
-            True, if the bot can be invited to groups. Returned only in get_me.
+            True, if the bot can be invited to groups. Returned only in :meth:`~pyrogram.Client.get_me`.
 
         can_read_all_group_messages (``bool``, *optional*):
-            True, if privacy mode is disabled for the bot. Returned only in get_me.
+            True, if privacy mode is disabled for the bot. Returned only in :meth:`~pyrogram.Client.get_me`.
 
         can_connect_to_business (``bool``, *optional*):
             True, if the bot can be connected to a Telegram Business account to receive its messages.
 
+        can_manage_bots (``bool``, *optional*):
+            True, if other bots can be created to be controlled by the bot. Returned only in :meth:`~pyrogram.Client.get_me`.
+
         has_main_web_app (``bool``, *optional*):
-            True, if the bot has a main Web App. Returned only in get_me.
+            True, if the bot has a main Web App. Returned only in :meth:`~pyrogram.Client.get_me`.
 
         has_topics (``bool``, *optional*):
             True, if the bot has topics.
@@ -447,6 +450,7 @@ class User(Object, Update):
         can_join_groups: Optional[bool] = None,
         can_read_all_group_messages: Optional[bool] = None,
         can_connect_to_business: Optional[bool] = None,
+        can_manage_bots: Optional[bool] = None,
         has_main_web_app: Optional[bool] = None,
         has_topics: Optional[bool] = None,
         allows_users_to_create_topics: Optional[bool] = None,
@@ -542,6 +546,7 @@ class User(Object, Update):
         self.can_join_groups = can_join_groups
         self.can_read_all_group_messages = can_read_all_group_messages
         self.can_connect_to_business = can_connect_to_business
+        self.can_manage_bots = can_manage_bots
         self.has_main_web_app = has_main_web_app
         self.has_topics = has_topics
         self.allows_users_to_create_topics = allows_users_to_create_topics
@@ -675,6 +680,7 @@ class User(Object, Update):
             can_join_groups=user.bot_nochats,
             can_read_all_group_messages=user.bot_chat_history,
             can_connect_to_business=user.bot_business,
+            can_manage_bots=user.bot_can_manage_bots,
             has_main_web_app=user.bot_has_main_app,
             has_topics=user.bot_forum_view,
             allows_users_to_create_topics=user.bot_forum_can_manage_topics,
