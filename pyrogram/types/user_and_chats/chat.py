@@ -508,6 +508,9 @@ class Chat(Object):
             True, if the gift button should be shown in the message input field for both participants in all chats.
             Returned only in :meth:`~pyrogram.Client.get_chat`
 
+        uses_unofficial_app (``bool``, *optional*):
+            True, if the user uses an unofficial application that poses a security risk.
+
         accepted_gift_types (:obj:`~pyrogram.types.AcceptedGiftTypes`, *optional*):
             Information about gifts that can be received by the user.
             Returned only in :meth:`~pyrogram.Client.get_chat`
@@ -658,6 +661,7 @@ class Chat(Object):
         paid_message_star_count: Optional[int] = None,
         is_paid_messages_available: Optional[bool] = None,
         display_gifts_button: Optional[bool] = None,
+        uses_unofficial_app: Optional[bool] = None,
         accepted_gift_types: Optional["types.AcceptedGiftTypes"] = None,
         note: Optional["types.FormattedText"] = None,
         raw: Optional[Union["raw.types.UserFull", "raw.types.ChatFull", "raw.types.ChannelFull"]] = None
@@ -796,6 +800,7 @@ class Chat(Object):
         self.paid_message_star_count = paid_message_star_count
         self.is_paid_messages_available = is_paid_messages_available
         self.display_gifts_button = display_gifts_button
+        self.uses_unofficial_app = uses_unofficial_app
         self.accepted_gift_types = accepted_gift_types
         self.note = note
         self.raw = raw
@@ -1087,6 +1092,7 @@ class Chat(Object):
         parsed_chat.pending_rating_date = utils.timestamp_to_datetime(user.stars_my_pending_rating_date)
         parsed_chat.paid_message_star_count = user.send_paid_messages_stars
         parsed_chat.display_gifts_button = user.display_gifts_button
+        parsed_chat.uses_unofficial_app = user.unofficial_security_risk
         parsed_chat.accepted_gift_types = types.AcceptedGiftTypes._parse(user.disallowed_gifts)
         parsed_chat.note = types.FormattedText._parse(client, user.note)
 

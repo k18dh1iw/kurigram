@@ -282,6 +282,9 @@ class User(Object, Update):
             True, if the gift button should be shown in the message input field for both participants in all chats.
             Returned only in :meth:`~pyrogram.Client.get_me`
 
+        uses_unofficial_app (``bool``, *optional*):
+            True, if the user uses an unofficial application that poses a security risk.
+
         bio (``str``, *optional*):
             Bio of the other party in a private chat.
             Returned only in :meth:`~pyrogram.Client.get_me`.
@@ -466,6 +469,7 @@ class User(Object, Update):
         can_view_revenue: Optional[bool] = None,
         bot_can_manage_emoji_status: Optional[bool] = None,
         display_gifts_button: Optional[bool] = None,
+        uses_unofficial_app: Optional[bool] = None,
         bio: Optional[str] = None,
         pinned_message: Optional["types.Message"] = None,
         folder_id: Optional[int] = None,
@@ -560,6 +564,7 @@ class User(Object, Update):
         self.can_view_revenue = can_view_revenue
         self.bot_can_manage_emoji_status = bot_can_manage_emoji_status
         self.display_gifts_button = display_gifts_button
+        self.uses_unofficial_app = uses_unofficial_app
         self.bio = bio
         self.pinned_message = pinned_message
         self.folder_id = folder_id
@@ -702,6 +707,7 @@ class User(Object, Update):
         parsed_user.can_view_revenue = user.can_view_revenue
         parsed_user.bot_can_manage_emoji_status = user.bot_can_manage_emoji_status
         parsed_user.display_gifts_button = user.display_gifts_button
+        parsed_user.uses_unofficial_app = user.unofficial_security_risk
         parsed_user.bio = user.about or None
         parsed_user.personal_photo = types.ChatPhoto._parse(client, user.personal_photo, users[user.id].id, users[user.id].access_hash)
         # parsed_user.photo = types.ChatPhoto._parse(client, user.profile_photo, users[user.id].id, users[user.id].access_hash)
