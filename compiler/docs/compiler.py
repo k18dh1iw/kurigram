@@ -532,7 +532,8 @@ def pyrogram_api():
             get_bot_info_short_description
             set_bot_name
             get_bot_name
-            get_bot_token
+            get_managed_bot_token
+            replace_managed_bot_token
             get_owned_bots
         """,
         business="""
@@ -706,6 +707,8 @@ def pyrogram_api():
             MessageOriginUser
             MessageOrigin
             Photo
+            PollOptionAdded
+            PollOptionDeleted
             Thumbnail
             StrippedThumbnail
             Audio
@@ -730,6 +733,7 @@ def pyrogram_api():
             CraftGiftResultSuccess
             CraftGiftResultFail
             Location
+            ManagedBotCreated
             MaskPosition
             MediaArea
             Venue
@@ -864,6 +868,7 @@ def pyrogram_api():
             MenuButtonDefault
             SentWebAppMessage
             KeyboardButtonRequestChat
+            KeyboardButtonRequestManagedBot
             KeyboardButtonRequestUsers
             KeyboardButtonPollType
             OrderInfo
@@ -912,6 +917,7 @@ def pyrogram_api():
             InputMediaVideo
             InputMessageContent
             InputPhoneContact
+            InputPollOption
             InputPrivacyRule
             InputPrivacyRuleAllowAll
             InputPrivacyRuleAllowBots

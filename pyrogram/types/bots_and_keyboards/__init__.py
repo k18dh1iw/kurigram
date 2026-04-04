@@ -47,6 +47,7 @@ from .purchased_paid_media import PurchasedPaidMedia
 from .reply_keyboard_markup import ReplyKeyboardMarkup
 from .reply_keyboard_remove import ReplyKeyboardRemove
 from .keyboard_button_request_chat import KeyboardButtonRequestChat
+from .keyboard_button_request_managed_bot import KeyboardButtonRequestManagedBot
 from .keyboard_button_poll_type import KeyboardButtonPollType
 from .keyboard_button_request_users import KeyboardButtonRequestUsers
 from .chat_shared import ChatShared
@@ -69,6 +70,7 @@ __all__ = [
     "ReplyKeyboardMarkup",
     "ReplyKeyboardRemove",
     "KeyboardButtonRequestChat",
+    "KeyboardButtonRequestManagedBot",
     "KeyboardButtonRequestUsers",
     "KeyboardButtonPollType",
     "ChatShared",

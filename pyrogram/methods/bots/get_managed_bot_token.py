@@ -16,36 +16,32 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional, Union
+from typing import Union
 
 import pyrogram
-from pyrogram import raw, types
+from pyrogram import raw
 
 
-class GetBotToken:
-    async def get_bot_token(
+class GetManagedBotToken:
+    async def get_managed_bot_token(
         self: "pyrogram.Client",
-        bot_user_id: Union[int, str],
-        revoke: Optional[bool] = None,
-    ) -> "types.User":
-        """Returns token of a created bot.
+        user_id: Union[int, str],
+    ) -> str:
+        """Use this method to get the token of a managed bot.
 
         .. include:: /_includes/usable-by/bots.rst
 
         Parameters:
-            bot_user_id (``int`` | ``str``):
-                Unique identifier (int) or username (str) of the created bot.
-
-            revoke (``bool``):
-                Pass True if the bot is created from link.
+            user_id (``int`` | ``str``):
+                Unique identifier (int) or username (str) of the managed bot whose token will be returned.
 
         Returns:
             ``str``: On success, bot token is returned.
         """
         r = await self.invoke(
             raw.functions.bots.ExportBotToken(
-                bot=await self.resolve_peer(bot_user_id),
-                revoke=revoke
+                bot=await self.resolve_peer(user_id),
+                revoke=False
             )
         )
 
