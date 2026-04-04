@@ -350,6 +350,7 @@ PARTICIPANTS_TOO_FEW	The chat doesn't have enough participants.
 PARTICIPANT_ID_INVALID	The specified participant ID is invalid.
 PARTICIPANT_JOIN_MISSING	Trying to enable a presentation, when the user hasn't joined the Video Chat with [phone.joinGroupCall](https://core.telegram.org/method/phone.joinGroupCall).
 PARTICIPANT_VERSION_OUTDATED	The other participant is using an outdated Telegram app version.
+PASSKEY_CREDENTIAL_NOT_FOUND	The passkey credential not found.
 PASSWORD_EMPTY	The provided password is empty.
 PASSWORD_HASH_INVALID	The two-step verification password is invalid.
 PASSWORD_MISSING	You must [enable 2FA](https://core.telegram.org/api/srp) before executing this operation.
