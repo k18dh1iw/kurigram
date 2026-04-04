@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
+from typing import Optional, Union
 
 import pyrogram
 from pyrogram import raw, types
@@ -25,7 +25,7 @@ from pyrogram import raw, types
 class ComposeTextWithAI:
     async def compose_text_with_ai(
         self: "pyrogram.Client",
-        text: "types.FormattedText",
+        text: Union[str, "types.FormattedText"],
         translate_to_language_code: str,
         style_name: Optional[str] = None,
         add_emojis: Optional[bool] = None,
@@ -35,7 +35,7 @@ class ComposeTextWithAI:
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
-            text (:obj:`~pyrogram.types.FormattedText`):
+            text (``str`` | :obj:`~pyrogram.types.FormattedText`):
                 The original text.
 
             translate_to_language_code (``str``):
@@ -54,6 +54,9 @@ class ComposeTextWithAI:
         Returns:
             :obj:`~pyrogram.types.FormattedText`: On success, information about the composed text is returned.
         """
+        if isinstance(text, str):
+            text = types.FormattedText(text=text)
+
         r = await self.invoke(
             raw.functions.messages.ComposeMessageWithAI(
                 text=await text.write(self),

@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import pyrogram
 from pyrogram import enums, raw, types, utils
@@ -25,7 +25,7 @@ from pyrogram import enums, raw, types, utils
 class TranslateText:
     async def translate_text(
         self: "pyrogram.Client",
-        text: "types.FormattedText",
+        text: Union[str, "types.FormattedText"],
         to_language_code: str,
         tone: Optional[str] = None,
     ) -> "types.FormattedText":
@@ -36,7 +36,7 @@ class TranslateText:
         .. include:: /_includes/usable-by/users.rst
 
         Parameters:
-            text (:obj:`~pyrogram.types.FormattedText`):
+            text (``str`` | :obj:`~pyrogram.types.FormattedText`):
                 Text to translate.
 
             to_language_code (``str``):
@@ -58,6 +58,9 @@ class TranslateText:
 
                 await app.translate_text("Hello!", "ru")
         """
+        if isinstance(text, str):
+            text = types.FormattedText(text=text)
+
         r = await self.invoke(
             raw.functions.messages.TranslateText(
                 to_lang=to_language_code,
