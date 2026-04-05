@@ -36,7 +36,7 @@ class SetContactNote:
             user_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target user.
 
-            note (``str``| :obj:`~pyrogram.types.FormattedText`, *optional*):
+            note (``str`` | :obj:`~pyrogram.types.FormattedText`, *optional*):
                 Note to set for the user.
 
         Returns:
