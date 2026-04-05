@@ -35,6 +35,7 @@ from .inline_keyboard_markup import InlineKeyboardMarkup
 from .keyboard_button import KeyboardButton
 from .labeled_price import LabeledPrice
 from .login_url import LoginUrl
+from .managed_bot_updated import ManagedBotUpdated
 from .menu_button import MenuButton
 from .menu_button_commands import MenuButtonCommands
 from .menu_button_default import MenuButtonDefault
@@ -77,6 +78,7 @@ __all__ = [
     "UsersShared",
     "LabeledPrice",
     "LoginUrl",
+    "ManagedBotUpdated",
     "BotCommand",
     "BotCommandScope",
     "BotCommandScopeAllChatAdministrators",

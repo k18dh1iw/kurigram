@@ -871,6 +871,7 @@ def pyrogram_api():
             KeyboardButtonRequestManagedBot
             KeyboardButtonRequestUsers
             KeyboardButtonPollType
+            ManagedBotUpdated
             OrderInfo
             PreCheckoutQuery
             ShippingAddress
