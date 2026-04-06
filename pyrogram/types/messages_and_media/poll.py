@@ -242,7 +242,7 @@ class Poll(Object, Update):
 
                 options.append(
                     types.PollOption(
-                        persistent_id=result.option.decode, voter_count=result.voters, client=client
+                        persistent_id=result.option.decode(), voter_count=result.voters, client=client
                     )
                 )
 

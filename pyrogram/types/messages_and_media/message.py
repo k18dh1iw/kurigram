@@ -9259,7 +9259,7 @@ class Message(Object, Update):
 
     async def vote(
         self,
-        option: int,
+        option: Union[int, List[int]]
     ) -> "types.Poll":
         """Shortcut for method :obj:`~pyrogram.Client.vote_poll` will automatically fill method attributes:
 
@@ -9267,8 +9267,8 @@ class Message(Object, Update):
         * message_id
 
         Parameters:
-            option (``int``):
-                Index of the poll option you want to vote for (0 to 9).
+            option (``int`` | List of ``int``):
+                Index or list of indexes (for multiple answers) of the poll option(s) you want to vote for (0 to 11).
 
         Returns:
             :obj:`~pyrogram.types.Poll`: On success, the poll with the chosen option is returned.
