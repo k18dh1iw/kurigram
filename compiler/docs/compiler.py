@@ -309,6 +309,8 @@ def pyrogram_api():
             compose_text_with_ai
             decline_suggested_post
             add_checklist_tasks
+            add_poll_option
+            delete_poll_option
             summarize_message
         """,
         chats="""
