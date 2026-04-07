@@ -26,7 +26,7 @@ class ComposeTextWithAI:
     async def compose_text_with_ai(
         self: "pyrogram.Client",
         text: Union[str, "types.FormattedText"],
-        translate_to_language_code: str,
+        translate_to_language_code: Optional[str],
         style_name: Optional[str] = None,
         add_emojis: Optional[bool] = None,
     ) -> "types.FormattedText":
@@ -38,7 +38,7 @@ class ComposeTextWithAI:
             text (``str`` | :obj:`~pyrogram.types.FormattedText`):
                 The original text.
 
-            translate_to_language_code (``str``):
+            translate_to_language_code (``str``, *optional*):
                 Pass a language code to which the text will be translated.
                 Must be one of "af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca", "ceb", "zh-CN", "zh", "zh-Hans", "zh-TW", "zh-Hant", "co", "hr", "cs", "da", "nl", "en", "eo", "et",
                 "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "iw", "hi", "hmn", "hu", "is", "ig", "id", "in", "ga", "it", "ja", "jv", "kn", "kk", "km", "rw", "ko",
