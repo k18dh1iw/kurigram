@@ -5068,7 +5068,7 @@ class Message(Object, Update):
     async def reply_poll(
         self,
         question: "types.FormattedText",
-        options: List["types.FormattedText"],
+        options: List[Union[str, "types.FormattedText"]],
         message_thread_id: Optional[int] = None,
         business_connection_id: Optional[str] = None,
         is_anonymous: bool = True,
