@@ -52,7 +52,7 @@ class SummarizeMessage:
                 Defaults to the client's language code.
 
             tone (``str``, *optional*):
-                Tone of the translation.
+                Tone of the summarization.
                 Must be one of "formal", "neutral", "casual".
 
         Returns:
