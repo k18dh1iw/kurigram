@@ -236,7 +236,7 @@ class SendPoll:
                         hash=self.rnd_id(),
                         closed=is_closed,
                         public_voters=not is_anonymous,
-                        multiple_choice=True if len(correct_option_ids) > 1 else allows_multiple_answers,
+                        multiple_choice=True if correct_option_ids and len(correct_option_ids) > 1 else allows_multiple_answers,
                         quiz=type == enums.PollType.QUIZ or False,
                         open_answers=False if type == enums.PollType.QUIZ and allow_adding_options else allow_adding_options,
                         revoting_disabled=not allows_revoting if allows_revoting is not None else (type == enums.PollType.QUIZ),
@@ -247,7 +247,7 @@ class SendPoll:
                     ),
                     correct_answers=correct_option_ids,
                     solution=solution,
-                    solution_entities=solution_entities or None
+                    solution_entities=solution_entities
                 ),
                 message=message or "",
                 entities=entities or None,
