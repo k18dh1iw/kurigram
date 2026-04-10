@@ -30,7 +30,7 @@ class SendPoll:
         self: "pyrogram.Client",
         chat_id: Union[int, str],
         question: Union[str, "types.FormattedText"],
-        options: List["types.InputPollOption"],
+        options: List[Union[str, "types.InputPollOption"]],
         message_thread_id: Optional[int] = None,
         business_connection_id: Optional[str] = None,
         is_anonymous: bool = True,
@@ -198,6 +198,18 @@ class SendPoll:
         if isinstance(description, str):
             description = types.FormattedText(text=description)
 
+        answers = []
+
+        for option in options:
+            if isinstance(option, str):
+                answers.append(
+                    types.InputPollOption(
+                        text=types.FormattedText(text=option)
+                    )
+                )
+            else:
+                answers.append(option)
+
         solution = None
         solution_entities = None
         message = None
@@ -220,7 +232,7 @@ class SendPoll:
                     poll=raw.types.Poll(
                         id=self.rnd_id(),
                         question=await question.write(self),
-                        answers=[await answer.write(self) for answer in options],
+                        answers=[await answer.write(self) for answer in answers],
                         hash=self.rnd_id(),
                         closed=is_closed,
                         public_voters=not is_anonymous,
