@@ -134,6 +134,15 @@ class TCP:
         log.info("Proxy connection established")
 
         self.reader, self.writer = await asyncio.open_connection(sock=sock)
+        try:
+            real_sock = self.writer.get_extra_info("socket")
+            if real_sock is not None:
+                real_sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                real_sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+                real_sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 4 * 1024 * 1024)
+                real_sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 4 * 1024 * 1024)
+        except OSError:
+            pass
 
     async def _connect_via_direct(self, destination: Tuple[str, int]) -> None:
         host, port = destination
@@ -150,6 +159,16 @@ class TCP:
         except Exception as e:
             log.error("Connection failed: %s %s", type(e).__name__, e)
             raise
+
+        sock = self.writer.get_extra_info("socket")
+        if sock is not None:
+            try:
+                sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 4 * 1024 * 1024)
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 4 * 1024 * 1024)
+            except OSError:
+                pass
 
         log.info("Connection established")
 
