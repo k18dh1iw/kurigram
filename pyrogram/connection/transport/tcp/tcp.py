@@ -133,6 +133,8 @@ class TCP:
 
         log.info("Proxy connection established")
 
+        self.reader, self.writer = await asyncio.open_connection(sock=sock)
+
     async def _connect_via_direct(self, destination: Tuple[str, int]) -> None:
         host, port = destination
         family = socket.AF_INET6 if self.ipv6 else socket.AF_INET
