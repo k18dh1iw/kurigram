@@ -116,7 +116,7 @@ class SaveFile:
                             await asyncio.sleep(2**attempt)
 
             part_size = 512 * 1024
-            queue = asyncio.Queue(8)
+            queue = asyncio.Queue(16)
 
             with (
                 open(path, "rb", buffering=4096)
