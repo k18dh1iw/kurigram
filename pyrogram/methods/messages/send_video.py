@@ -44,7 +44,7 @@ class SendVideo:
         width: int = 0,
         height: int = 0,
         video_start_timestamp: int = None,
-        video_cover: Union[str, BinaryIO] = None,
+        cover: Union[str, BinaryIO] = None,
         thumb: Union[str, BinaryIO] = None,
         file_name: str = None,
         supports_streaming: bool = True,
@@ -314,6 +314,7 @@ class SendVideo:
         vcover_media = None
         peer = await self.resolve_peer(chat_id)
 
+        video_cover = cover
         try:
             if video_cover is not None:
                 if isinstance(video_cover, str):
